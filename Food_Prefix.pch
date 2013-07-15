@@ -1,0 +1,59 @@
+//
+// Prefix header for all source files of the 'Food' target in the 'Food' project
+//
+
+#import <Availability.h>
+
+#ifndef __IPHONE_3_0
+#warning "This project uses features only available in iPhone SDK 3.0 and later."
+#endif
+
+
+#ifdef __OBJC__
+    #import <Foundation/Foundation.h>
+    #import <UIKit/UIKit.h>
+    #import <CoreData/CoreData.h>
+#endif
+
+#ifndef DEBUG
+#define NSLog //
+#endif
+
+#define TIME_OUT 20
+
+#define CT_UNKNOWN 0
+#define CT_XML 1
+#define CT_JSON 2
+
+//TAB TAG
+#define TT_UNFIT 0
+#define TT_FIT 1
+#define TT_SEARCH 2
+#define TT_PICTURE 3
+#define TT_FAVORITE 4
+
+typedef enum {
+	NotReachable = 0,
+	ReachableViaWiFi,
+	ReachableViaWWAN
+} NetworkStatus;
+
+#define STATUS_BAR_HEIGHT 20.0
+#define NAVIGATION_BAR_HEIGHT 44.0
+#define TAB_BAR_HEIGHT 50.0
+
+#define EMOJI_WIDTH 17.0
+
+#define AD_HEIGHT 50.0
+#define AD_ID @"a14ef04b44bd708"
+
+#define DETAIL_TEXT_COLOR [UIColor colorWithRed:0.01 green:0.18 blue:0.36 alpha:1.00]
+#define NAVIGATION_BAR_COLOR [UIColor colorWithRed:0.03 green:0.51 blue:1.00 alpha:1.00]
+
+#define KEY_0 @"b73bd5e4e7d2d3d7"
+#define KEY_1 @"c0199336a6202202"
+#define KEY_2 @"4c1f60126fbb2f59" //快递100用
+
+#define FEEDBACK_EMAIL_TITLE @"问题与意见反馈（快递追踪查询Free v1.6）"
+#define APPSTORE_URL @""
+
