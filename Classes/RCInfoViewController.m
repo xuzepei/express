@@ -219,7 +219,13 @@
         
         [compose setToRecipients:[NSArray arrayWithObject:@"intelligentapps@gmail.com"]];
         
-        [compose setSubject:FEEDBACK_EMAIL_TITLE];
+        NSMutableString* subject = [[[NSMutableString alloc] init] autorelease];
+        [subject appendString:FEEDBACK_EMAIL_TITLE];
+        [subject appendFormat:@",v%@",APP_VERSION];
+        [subject appendFormat:@" ,iOS %.2f",[RCTool systemVersion]];
+        [subject appendFormat:@" ,device %d",UI_USER_INTERFACE_IDIOM()];
+        
+        [compose setSubject:subject];
         
         [compose setMessageBody:@"请在来信中明确问题的情况，包括：\r\r1.如果未能成功查询，请写明快递公司和快递单号； \r\r2.如果无法找到对应的快递公司，请写明快递公司名称，我们会在新版本中尽力为您添加；" isHTML:NO];
         

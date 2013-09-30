@@ -11,11 +11,11 @@
 #import "FDResultViewController.h"
 #import "RCTool.h"
 #import "RCInquiryHttpRequest.h"
+#import "RCRecentCell.h"
+
+#define OPERATE_TAG 100
 
 @implementation FDFavoriteViewController
-@synthesize _tableView;
-@synthesize _itemArray;
-@synthesize _indicator;
 
 // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
 
@@ -54,9 +54,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-        self.view.frame = CGRectMake(0,0,[RCTool getScreenSize].width,[RCTool getScreenSize].height - STATUS_BAR_HEIGHT - NAVIGATION_BAR_HEIGHT - TAB_BAR_HEIGHT);
+//        self.view.frame = CGRectMake(0,0,[RCTool getScreenSize].width,[RCTool getScreenSize].height - STATUS_BAR_HEIGHT - NAVIGATION_BAR_HEIGHT - TAB_BAR_HEIGHT);
     
     [self initTableView];
+    
+    [self initAddNoteView];
     
     [self updateContent:nil];
 }
@@ -83,7 +85,7 @@
     
     // Release any cached data, images, etc. that aren't in use.
     
-    self._tableView = nil;
+    self.tableView = nil;
 }
 
 - (void)viewDidUnload {
@@ -91,7 +93,7 @@
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
     
-    self._tableView = nil;
+    self.tableView = nil;
 }
 
 
@@ -99,10 +101,12 @@
 	
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	
-	[_itemArray release];
-	self._tableView = nil;
+	self.itemArray = nil;
+	self.tableView = nil;
     self.selectedRecord = nil;
-    self._indicator = nil;
+    self.indicator = nil;
+    self.addNoteView = nil;
+    self.maskView = nil;
 	
     [super dealloc];
 }
@@ -112,7 +116,11 @@
 	//init table view
     if(nil == _tableView)
     {
-        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0,0,self.view.frame.size.width,self.view.frame.size.height)
+        CGFloat height = [RCTool getScreenSize].height - STATUS_BAR_HEIGHT - NAVIGATION_BAR_HEIGHT - TAB_BAR_HEIGHT;
+        if([RCTool systemVersion] >= 7.0)
+            height = [RCTool getScreenSize].height;
+        
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0,0,[RCTool getScreenSize].width,height)
                                                   style:UITableViewStylePlain];
     }
 	//_tableView.backgroundColor = [UIColor clearColor];
@@ -156,8 +164,111 @@
 	self.tabBarItem.badgeValue = badgeValue;
 }
 
+- (void)initAddNoteView
+{
+    if(nil == _addNoteView)
+    {
+        _addNoteView = [[RCAddNoteView alloc] initWithFrame:CGRectMake(([RCTool getScreenSize].width - 300)/2.0, 0, 300, 140)];
+        _addNoteView.delegate = self;
+        
+        _maskView = [[UIView alloc] initWithFrame:[RCTool getScreenRect]];
+        _maskView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
+    }
+}
+
 #pragma mark -
 #pragma mark UITableView delegate methods
+
+- (CGFloat)getCellHeight:(NSIndexPath*)indexPath tableView:(UITableView*)tableView
+{
+	Record* record = (Record*)[self getCellDataAtIndexPath:indexPath tableView:tableView];
+    if(nil == record)
+        return 80.0;
+    
+    CGFloat max_width = [RCTool getScreenSize].width - 30.0;
+    CGFloat fontSize = 14.0;
+    if([RCTool isIpad])
+    {
+        fontSize = 18.0;
+    }
+
+    CGFloat height = 12.0;
+    NSString* danhao = record.num;
+    if([danhao length])
+    {
+        NSString* state = @"";
+        NSDictionary* dict = [RCTool getResult:record.time];
+        if(dict)
+        {
+            //state:快递单当前的状态 。0：在途中,1：已发货，2：疑难件，3： 已签收 ，4：已退货。
+            
+            int i = [[dict objectForKey:@"state"] intValue];
+            switch (i) {
+                case 0:
+                {
+                    state = @"(在途中)";
+                    break;
+                }
+                case 1:
+                {
+                    state = @"(已发货)";
+                    break;
+                }
+                case 2:
+                {
+                    state = @"(疑难件)";
+                    break;
+                }
+                case 3:
+                {
+                    state = @"(已签收)";
+                    break;
+                }
+                case 4:
+                {
+                    state = @"(已退货)";
+                    break;
+                }
+                default:
+                    break;
+            }
+        }
+
+        NSString* temp = [NSString stringWithFormat:@"单号: %@ %@",danhao,state];
+        CGSize size = [temp sizeWithFont:[UIFont systemFontOfSize:fontSize+2] constrainedToSize:CGSizeMake(max_width, CGFLOAT_MAX)];
+        height += size.height;
+    }
+    
+    NSString* note = record.note;
+    if([note length])
+    {
+        NSString* temp = [NSString stringWithFormat:@"备注: %@",note];
+        CGSize size = [temp sizeWithFont:[UIFont systemFontOfSize:fontSize+2] constrainedToSize:CGSizeMake(max_width, CGFLOAT_MAX)];
+        height += size.height;
+    }
+    
+    NSString* name = record.name;
+    if([name length])
+    {
+        NSString* temp = [NSString stringWithFormat:@"快递: %@",name];
+        CGSize size = [temp sizeWithFont:[UIFont systemFontOfSize:fontSize] constrainedToSize:CGSizeMake(max_width, CGFLOAT_MAX)];
+        height += size.height;
+    }
+    
+    double time = [record.time doubleValue];
+    NSDate* date = [NSDate dateWithTimeIntervalSince1970:time];
+    NSDateFormatter* dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
+    dateFormatter.dateFormat = @"yyyy-MM-dd H:m:s";
+    NSString* dateString = [dateFormatter stringFromDate:date];
+    if([dateString length])
+    {
+        NSString* temp = [NSString stringWithFormat:@"时间: %@",dateString];
+        CGSize size = [temp sizeWithFont:[UIFont systemFontOfSize:fontSize] constrainedToSize:CGSizeMake(max_width, CGFLOAT_MAX)];
+        height += size.height;
+    }
+    
+    return height;
+}
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView 
 {
@@ -192,10 +303,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	if(NO == [RCTool isIpad])
-		return 70.0;
-	else 
-		return 90.0;
+	return [self getCellHeight:indexPath tableView:tableView];
 }
 
 
@@ -206,44 +314,16 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
     if (cell == nil) 
 	{
-		cell = [[[UITableViewCell alloc] initWithStyle: UITableViewCellStyleSubtitle 
+		cell = [[[RCRecentCell alloc] initWithStyle: UITableViewCellStyleSubtitle 
 									   reuseIdentifier: cellId] autorelease];
 		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-		
-		if([RCTool isIpad])
-		{
-			cell.textLabel.font = [UIFont systemFontOfSize:24];
-			cell.detailTextLabel.font = [UIFont systemFontOfSize:18];
-		}
-		else
-		{
-			cell.detailTextLabel.numberOfLines = 2;
-		}
-
     }
 	
 	Record* record = (Record*)[self getCellDataAtIndexPath:indexPath tableView:tableView];
 	if(record)
 	{
-		cell.textLabel.text = record.name;
-		double time = [record.time doubleValue];
-		NSDate* date = [NSDate dateWithTimeIntervalSince1970:time];
-		NSDateFormatter* dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
-		//dateFormatter.dateStyle = NSDateFormatterShortStyle;
-		dateFormatter.dateFormat = @"yy-MM-dd H:m:s";
-		//[dateFormatter setLocale:[[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"] autorelease]];
-		NSString* temp = [dateFormatter stringFromDate:date];
-		//return temp;
-		
-		if([RCTool isIpad])
-		{
-			cell.detailTextLabel.text = [NSString stringWithFormat:@"单号:%@    时间:%@",record.num,temp];
-		}
-		else 
-		{
-			cell.detailTextLabel.text = [NSString stringWithFormat:@"单号:%@\r时间:%@",record.num,temp];
-		}
-
+        RCRecentCell* temp = (RCRecentCell*)cell;
+        [temp updateContent:record height:[self getCellHeight:indexPath tableView:tableView] delegate:nil];
 	}
     
     return cell;
@@ -264,12 +344,11 @@
                                                         cancelButtonTitle: NSLocalizedString(@"取消",@"")
                                                    destructiveButtonTitle:nil
                                                         otherButtonTitles:
-                                      @"查看",@"刷新",@"复制单号",@"通过邮件发送",@"通过短信发送",nil];
+                                      @"查看",@"刷新",@"添加备注",@"复制单号",@"通过邮件发送",@"通过短信发送",nil];
         
         actionSheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
-        actionSheet.tag = 0;
+        actionSheet.tag = OPERATE_TAG;
         [actionSheet showFromTabBar:self.tabBarController.tabBar];
-        //[actionSheet showInView:self.];
         [actionSheet release];
 	}
 }
@@ -321,6 +400,7 @@
     FDResultViewController* temp = [[FDResultViewController alloc] initWithNibName:@"FDResultViewController"
                                                                             bundle:nil];
     [temp updateContent: self.selectedRecord];
+    temp.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:temp animated:YES];
     [temp release];
 }
@@ -381,6 +461,28 @@
 		[alert show];
 		[alert release];
 	}
+}
+
+- (void)addNote
+{
+    CGRect rect = _addNoteView.frame;
+    rect.origin.y = 0 - rect.size.height;
+    _addNoteView.frame = rect;
+    [_maskView addSubview:_addNoteView];
+    
+    [self.navigationController.view addSubview:_maskView];
+    
+    [_addNoteView.inputTF becomeFirstResponder];
+    
+    CGFloat offset_y = 270;
+    if([RCTool isIpad])
+        offset_y = 336.0;
+    
+    [UIView animateWithDuration:0.3 animations:^{
+        CGRect rect = _addNoteView.frame;
+        rect.origin.y = [RCTool getScreenSize].height - offset_y - rect.size.height;
+        _addNoteView.frame = rect;
+    }];
 }
 
 - (void)copyNumberFromRecord
@@ -512,9 +614,9 @@
     
 }
 
-- (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-	if(0 == actionSheet.tag)
+	if(OPERATE_TAG == actionSheet.tag)
 	{
 		if(0 == buttonIndex)
 		{
@@ -526,17 +628,53 @@
         }
         else if(2 == buttonIndex)
         {
-            [self copyNumberFromRecord];
+            [self addNote];
         }
         else if(3 == buttonIndex)
         {
-            [self sendRecordByEmail];
+            [self copyNumberFromRecord];
         }
         else if(4 == buttonIndex)
+        {
+            [self sendRecordByEmail];
+        }
+        else if(5 == buttonIndex)
         {
             [self sendRecordBySMS];
         }
 	}
+}
+
+#pragma mark - RCAddNoteViewDelegate
+
+- (void)clickedCancelButton:(id)token
+{
+    if(_addNoteView)
+    {
+        [_maskView removeFromSuperview];
+        [_addNoteView removeFromSuperview];
+    }
+}
+
+- (void)clickedSureButton:(id)token
+{
+    if(self.selectedRecord)
+    {
+        NSString* note = (NSString*)token;
+        if([note length])
+        {
+            self.selectedRecord.note = note;
+            [RCTool saveCoreData];
+            
+            [self updateContent:nil];
+        }
+    }
+    
+    if(_addNoteView)
+    {
+        [_maskView removeFromSuperview];
+        [_addNoteView removeFromSuperview];
+    }
 }
 
 #pragma mark - RCInquiryHttpRequestDelegate
@@ -626,6 +764,7 @@
 	FDResultViewController* temp = [[FDResultViewController alloc] initWithNibName:@"FDResultViewController"
 																			bundle:nil];
 	[temp updateContent: record];
+    temp.hidesBottomBarWhenPushed = YES;
 	[self.navigationController pushViewController:temp animated:YES];
 	[temp release];
 	

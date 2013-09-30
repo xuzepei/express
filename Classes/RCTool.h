@@ -14,6 +14,7 @@
 
 + (NSString*)getUserDocumentDirectoryPath;
 + (NSString *)md5:(NSString *)str;
++ (CGFloat)systemVersion;
 
 + (BOOL)isExistingFile:(NSString*)path;
 
@@ -62,16 +63,19 @@
 + (NSArray*)getRecentExpress;
 
 #pragma mark - 兼容iOS6和iPhone5
+
 + (CGSize)getScreenSize;
+
 + (CGRect)getScreenRect;
+
 + (BOOL)isIphone5;
+
++ (CGFloat)systemVersion;
 
 + (void)playSound:(NSString*)filename;
 
 + (void)showAlert:(NSString*)aTitle message:(NSString*)message;
 
 + (BOOL)checkCrackedApp;
-
-+ (CGFloat)systemVersion;
 
 @end

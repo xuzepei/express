@@ -487,6 +487,13 @@ void systemSoundCompletionProc(SystemSoundID ssID,void *clientData)
     return NO;
 }
 
++ (CGFloat)systemVersion
+{
+    CGFloat systemVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
+    
+    return systemVersion;
+}
+
 + (void)playSound:(NSString*)filename
 {
     if(g_soundID || 0 == [filename length])
@@ -527,6 +534,7 @@ void systemSoundCompletionProc(SystemSoundID ssID,void *clientData)
 	NSDictionary *info = [bundle infoDictionary];
 	if ([info objectForKey: @"SignerIdentity"] != nil)//判断是否为破解App,方法可能已过时
 	{
+         NSLog(@"+++isCraked");
 		isCraked = YES;
 	}
     else//通过检查是否为jailbreak设备来判断是否为破解App
@@ -558,6 +566,7 @@ void systemSoundCompletionProc(SystemSoundID ssID,void *clientData)
         {
             if ([[NSFileManager defaultManager] fileExistsAtPath:path])
             {
+                NSLog(@"!!!!isCraked");
                 isCraked = YES;
                 break;
             }
@@ -566,13 +575,6 @@ void systemSoundCompletionProc(SystemSoundID ssID,void *clientData)
     }
     
     return isCraked;
-}
-
-+ (CGFloat)systemVersion
-{
-    CGFloat systemVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
-    
-    return systemVersion;
 }
 
 @end

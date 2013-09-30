@@ -19,6 +19,7 @@
 @property (nonatomic, retain) NSString * name;
 @property (nonatomic, retain) NSString * time;
 @property (nonatomic, retain) NSString * desc;
+@property (nonatomic, retain) NSString * note;
 
 @end
 

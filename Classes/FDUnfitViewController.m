@@ -45,23 +45,23 @@
 {
 	[super viewWillAppear: animated];
 	
-    CGFloat adHeight = 0.0;
-	UIView* adView = [RCTool getAdView];
-	if(adView)
-	{
-        adHeight = adView.bounds.size.height;
-		CGRect rect = adView.frame;
-        rect.origin.y = self.view.frame.size.height - adView.frame.size.height;
-		adView.frame = rect;
-		
-		[self.view addSubview:adView];
-	}
-    
-    if(_tableView)
-    {
-        _tableView.frame = CGRectMake(0,0,self.view.frame.size.width,self.view.frame.size.height - adHeight);
-        [_tableView reloadData];
-    }
+//    CGFloat adHeight = 0.0;
+//	UIView* adView = [RCTool getAdView];
+//	if(adView)
+//	{
+//        adHeight = adView.bounds.size.height;
+//		CGRect rect = adView.frame;
+//        rect.origin.y = self.view.frame.size.height - adView.frame.size.height;
+//		adView.frame = rect;
+//		
+//		[self.view addSubview:adView];
+//	}
+//    
+//    if(_tableView)
+//    {
+//        _tableView.frame = CGRectMake(0,0,self.view.frame.size.width,self.view.frame.size.height - adHeight);
+//        [_tableView reloadData];
+//    }
     
     if(_infoButton)
         _infoButton.hidden = NO;
@@ -86,9 +86,7 @@
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    self.view.frame = CGRectMake(0,0,[RCTool getScreenSize].width,[RCTool getScreenSize].height - STATUS_BAR_HEIGHT - NAVIGATION_BAR_HEIGHT - TAB_BAR_HEIGHT);
-    
+
     [self initTableView];
 	
 	[self updateContent];
@@ -146,7 +144,11 @@
 	//init table view
     if(nil == _tableView)
     {
-        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0,0,self.view.frame.size.width,self.view.frame.size.height)
+        CGFloat height = [RCTool getScreenSize].height - STATUS_BAR_HEIGHT - NAVIGATION_BAR_HEIGHT - TAB_BAR_HEIGHT;
+        if([RCTool systemVersion] >= 7.0)
+            height = [RCTool getScreenSize].height;
+        
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0,0,[RCTool getScreenSize].width,height)
                                                   style:UITableViewStylePlain];
 	}
 	_tableView.delegate = self;

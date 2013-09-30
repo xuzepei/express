@@ -77,13 +77,21 @@
 	if(adView)
 	{
 		CGRect rect = adView.frame;
-        rect.origin.y = self.view.frame.size.height - adView.frame.size.height;
-		adView.frame = rect;
+
+        if([RCTool systemVersion] >= 7.0)
+        {
+            rect.origin.y = [RCTool getScreenSize].height -TAB_BAR_HEIGHT - adView.frame.size.height;
+            adView.frame = rect;
+        }
+        else
+        {
+            rect.origin.y = [RCTool getScreenSize].height - STATUS_BAR_HEIGHT - NAVIGATION_BAR_HEIGHT - TAB_BAR_HEIGHT - adView.frame.size.height;
+            adView.frame = rect;
+        }
 		
 		[self.view addSubview:adView];
 	}
 }
-
 
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
@@ -92,7 +100,7 @@
 	MyView* temp = (MyView*)self.view;
 	temp._delegate = self;
     
-    self.view.frame = CGRectMake(0,0,[RCTool getScreenSize].width,[RCTool getScreenSize].height - STATUS_BAR_HEIGHT - NAVIGATION_BAR_HEIGHT - TAB_BAR_HEIGHT);
+//    self.view.frame = CGRectMake(0,0,[RCTool getScreenSize].width,[RCTool getScreenSize].height - STATUS_BAR_HEIGHT - NAVIGATION_BAR_HEIGHT - TAB_BAR_HEIGHT);
     
     [self initScrollView];
 }
@@ -220,7 +228,7 @@
 			self._phoneNumLabel = [[[OHAttributedLabel alloc] initWithFrame:CGRectZero] autorelease];
             self._phoneNumLabel.underlineLinks = YES;
 			_phoneNumLabel.lineBreakMode =
-            UILineBreakModeWordWrap;
+            NSLineBreakByWordWrapping;
 			_phoneNumLabel.backgroundColor = [UIColor clearColor];
 			_phoneNumLabel.delegate = self;
 			NSMutableAttributedString* attrStr = [NSMutableAttributedString attributedStringWithString:_selectedExpress.phoneNum];
@@ -259,7 +267,7 @@
 			
 			self._webLabel = [[[OHAttributedLabel alloc] initWithFrame:CGRectZero] autorelease];
             self._webLabel.underlineLinks = YES;
-			_webLabel.lineBreakMode = UILineBreakModeWordWrap;
+			_webLabel.lineBreakMode = NSLineBreakByWordWrapping;
 			_webLabel.backgroundColor = [UIColor clearColor];
 			_webLabel.delegate = self;
 			NSMutableAttributedString* attrStr = [NSMutableAttributedString attributedStringWithString:_selectedExpress.web];
@@ -344,8 +352,8 @@
     
     if([RCTool systemVersion] >= 7.0)
     {
-    self._inquiryButton.layer.borderWidth = 1.0f;
-    self._inquiryButton.layer.cornerRadius = 10;
+    self._inquiryButton.layer.borderWidth = 0.0f;
+    self._inquiryButton.layer.cornerRadius = 0;
     self._inquiryButton.layer.borderColor = [[UIColor grayColor] CGColor];
     }
     
@@ -380,16 +388,25 @@
 	CGFloat offset_y = 20.0;
 	if(NO == [RCTool isIpad])
 	{
-		_selectExpressButton.frame = CGRectMake(60,offset_y,200,40);
+		_selectExpressButton.frame = CGRectMake(60.0,offset_y,200,40);
 		_selectExpressButton.titleLabel.font = [UIFont boldSystemFontOfSize: 18];
 		_inputTF.frame = CGRectMake(60, offset_y + 60, 200, 40);
 		_inputTF.font = [UIFont systemFontOfSize: 20];
         
         _scanButton.frame = CGRectMake(320 - 40 - 10, offset_y + 60, 40, 40);
         
-        CGFloat inquiryButtonOriginY = self.view.frame.size.height - 50.0 - 30.0;
+        CGFloat inquiryButtonOriginY = 0.0;
+        if([RCTool systemVersion] >= 7.0)
+        {
+            inquiryButtonOriginY = [RCTool getScreenSize].height - TAB_BAR_HEIGHT - AD_HEIGHT - 32.0;
+        }
+        else
+        {
+            inquiryButtonOriginY = [RCTool getScreenSize].height - STATUS_BAR_HEIGHT - NAVIGATION_BAR_HEIGHT - TAB_BAR_HEIGHT - AD_HEIGHT - 32.0;
+        }
+
 		_inquiryButton.frame = CGRectMake(([RCTool getScreenSize].width - 200)/2.0,inquiryButtonOriginY,200,30);
-		_inquiryButton.titleLabel.font = [UIFont boldSystemFontOfSize: 16];
+		_inquiryButton.titleLabel.font = [UIFont boldSystemFontOfSize: 18];
 		
 		label0.frame = CGRectMake(10,offset_y,100,40);
 		label0.font = [UIFont boldSystemFontOfSize:19];
@@ -400,22 +417,31 @@
 	}
 	else 
 	{
-		offset_y = 40.0;
-		_selectExpressButton.frame = CGRectMake(120,offset_y,400,60);
+		offset_y = 100.0;
+		_selectExpressButton.frame = CGRectMake(([RCTool getScreenSize].width - 400.0)/2.0,offset_y,400,60);
 		_selectExpressButton.titleLabel.font = [UIFont boldSystemFontOfSize: 26];
-		_inputTF.frame = CGRectMake(120, offset_y + 120, 400, 60);
+		_inputTF.frame = CGRectMake(([RCTool getScreenSize].width - 400.0)/2.0, offset_y + 120, 400, 60);
 		_inputTF.font = [UIFont systemFontOfSize: 30];
         
-        _scanButton.frame = CGRectMake(120+400+30, offset_y + 120, 60, 60);
+        _scanButton.frame = CGRectMake([RCTool getScreenSize].width/2.0 + 200 + 30.0, offset_y + 120, 60, 60);
         
-        CGFloat inquiryButtonOriginY = self.view.frame.size.height - 90.0 - 40.0;
+        CGFloat inquiryButtonOriginY = 0.0;
+        if([RCTool systemVersion] >= 7.0)
+        {
+            inquiryButtonOriginY = [RCTool getScreenSize].height - TAB_BAR_HEIGHT - 90.0 - 42.0;
+        }
+        else
+        {
+            inquiryButtonOriginY = [RCTool getScreenSize].height - STATUS_BAR_HEIGHT - NAVIGATION_BAR_HEIGHT - TAB_BAR_HEIGHT - 90.0 - 42.0;
+        }
+        
 		_inquiryButton.frame = CGRectMake(([RCTool getScreenSize].width - 500)/2.0,inquiryButtonOriginY,500,40);
-		_inquiryButton.titleLabel.font = [UIFont boldSystemFontOfSize: 20];
+		_inquiryButton.titleLabel.font = [UIFont boldSystemFontOfSize: 22];
 		
-		label0.frame = CGRectMake(20,offset_y,200,60);
+		label0.frame = CGRectMake(80,offset_y,200,60);
 		label0.font = [UIFont boldSystemFontOfSize:30];
 		
-		label1.frame = CGRectMake(20, offset_y + 120, 400, 60);
+		label1.frame = CGRectMake(80, offset_y + 120, 400, 60);
 		label1.font = [UIFont boldSystemFontOfSize:30];
 	}
 }
@@ -703,6 +729,7 @@
 	FDResultViewController* temp = [[FDResultViewController alloc] initWithNibName:@"FDResultViewController"
 																			bundle:nil];
 	[temp updateContent: record];
+    temp.hidesBottomBarWhenPushed = YES;
 	[self.navigationController pushViewController:temp animated:YES];
 	[temp release];
 	

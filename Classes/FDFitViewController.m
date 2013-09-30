@@ -47,22 +47,22 @@
 {
 	[super viewWillAppear: animated];
     
-    CGFloat adHeight = 0.0;
-	UIView* adView = [RCTool getAdView];
-	if(adView)
-	{
-        adHeight = adView.bounds.size.height;
-		CGRect rect = adView.frame;
-        rect.origin.y = self.view.frame.size.height - adView.frame.size.height;
-		adView.frame = rect;
-		
-		[self.view addSubview:adView];
-	}
-    
-    if(_tableView)
-    {
-        _tableView.frame = CGRectMake(0,0,self.view.frame.size.width,self.view.frame.size.height - adHeight);
-    }
+//    CGFloat adHeight = 0.0;
+//	UIView* adView = [RCTool getAdView];
+//	if(adView)
+//	{
+//        adHeight = adView.bounds.size.height;
+//		CGRect rect = adView.frame;
+//        rect.origin.y = self.view.frame.size.height - adView.frame.size.height;
+//		adView.frame = rect;
+//		
+//		[self.view addSubview:adView];
+//	}
+//    
+//    if(_tableView)
+//    {
+//        _tableView.frame = CGRectMake(0,0,self.view.frame.size.width,self.view.frame.size.height - adHeight);
+//    }
 }
 
 
@@ -70,7 +70,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.view.frame = CGRectMake(0,0,[RCTool getScreenSize].width,[RCTool getScreenSize].height - STATUS_BAR_HEIGHT - NAVIGATION_BAR_HEIGHT - TAB_BAR_HEIGHT);
+//    self.view.frame = CGRectMake(0,0,[RCTool getScreenSize].width,[RCTool getScreenSize].height - STATUS_BAR_HEIGHT - NAVIGATION_BAR_HEIGHT - TAB_BAR_HEIGHT);
 	
     [self initTableView];
     
@@ -127,7 +127,11 @@
 	//init table view
     if(nil == _tableView)
     {
-        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0,0,self.view.frame.size.width,self.view.frame.size.height)
+        CGFloat height = [RCTool getScreenSize].height - STATUS_BAR_HEIGHT - NAVIGATION_BAR_HEIGHT - TAB_BAR_HEIGHT;
+        if([RCTool systemVersion] >= 7.0)
+            height = [RCTool getScreenSize].height;
+        
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0,0,[RCTool getScreenSize].width,height)
                                                   style:UITableViewStylePlain];
     }
     

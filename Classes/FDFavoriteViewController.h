@@ -10,19 +10,21 @@
 #import "Record.h"
 #import <MessageUI/MessageUI.h>
 #import "MBProgressHUD.h"
+#import "RCAddNoteView.h"
 
 @interface FDFavoriteViewController : UIViewController 
 <UITableViewDelegate,UITableViewDataSource,UIActionSheetDelegate,MFMailComposeViewControllerDelegate,MFMessageComposeViewControllerDelegate>
 {
-	UITableView* _tableView;
-	NSMutableArray* _itemArray;
 	BOOL _cellEditing;
 }
 
-@property(nonatomic,retain)UITableView* _tableView;
-@property(nonatomic,retain)NSMutableArray* _itemArray;
+@property(nonatomic,retain)UITableView* tableView;
+@property(nonatomic,retain)NSMutableArray* itemArray;
 @property(nonatomic,retain)Record* selectedRecord;
-@property(nonatomic,retain)MBProgressHUD* _indicator;
+@property(nonatomic,retain)MBProgressHUD* indicator;
+
+@property(nonatomic,retain)UIView* maskView;
+@property(nonatomic,retain)RCAddNoteView* addNoteView;
 
 - (void)initTableView;
 - (void)updateContent:(NSNotification*)notification;

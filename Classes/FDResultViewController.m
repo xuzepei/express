@@ -10,11 +10,7 @@
 #import "RCTool.h"
 
 
-#define COLOR_0 [UIColor colorWithHue:0.10 saturation:0.95 brightness:1.00 alpha:1.00]
-#define COLOR_1 [UIColor colorWithRed:0.33 green:0.94 blue:1.00 alpha:1.00]
-#define COLOR_2 [UIColor colorWithRed:1.00 green:0.09 blue:0.09 alpha:1.00]
-#define COLOR_3 [UIColor colorWithRed:0.04 green:0.38 blue:0.04 alpha:1.00]
-#define COLOR_4 [UIColor colorWithRed:1.00 green:0.09 blue:0.09 alpha:1.00]
+
 
 @implementation FDResultViewController
 @synthesize _tableView;
@@ -43,7 +39,7 @@
     
     [super viewDidLoad];
     
-    self.view.frame = CGRectMake(0,0,[RCTool getScreenSize].width,[RCTool getScreenSize].height - STATUS_BAR_HEIGHT - 75.0 - TAB_BAR_HEIGHT);
+//    self.view.frame = CGRectMake(0,0,[RCTool getScreenSize].width,[RCTool getScreenSize].height - STATUS_BAR_HEIGHT - 75.0 - TAB_BAR_HEIGHT);
     
     [self initTableView];
 }
@@ -89,7 +85,11 @@
 {
     if(nil == _tableView)
     {
-        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0,0,self.view.frame.size.width,self.view.frame.size.height)
+        CGFloat height = [RCTool getScreenSize].height - STATUS_BAR_HEIGHT - NAVIGATION_BAR_HEIGHT - 30;
+        if([RCTool systemVersion] >= 7.0)
+            height = [RCTool getScreenSize].height;
+        
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0,0,[RCTool getScreenSize].width,height)
                                                   style:UITableViewStylePlain];
         _tableView.delegate = self;
         _tableView.dataSource = self;

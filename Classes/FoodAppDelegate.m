@@ -135,8 +135,8 @@
     /*
      Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
      */
-	
-	[self getAD:nil];
+    
+    [self getAD:nil];
 }
 
 
@@ -375,8 +375,17 @@
         if([visibleViewController isKindOfClass:[FDPictureViewController class]])
         {
             CGRect rect = adMobAd.frame;
-            rect.origin.y = _tabBarController.selectedViewController.view.frame.size.height - rect.size.height;
-            adMobAd.frame = rect;
+            
+            if([RCTool systemVersion] >= 7.0)
+            {
+                rect.origin.y = [RCTool getScreenSize].height -TAB_BAR_HEIGHT - adMobAd.frame.size.height;
+                adMobAd.frame = rect;
+            }
+            else
+            {
+                rect.origin.y = [RCTool getScreenSize].height - STATUS_BAR_HEIGHT - NAVIGATION_BAR_HEIGHT - TAB_BAR_HEIGHT - adMobAd.frame.size.height;
+                adMobAd.frame = rect;
+            }
             
             [_tabBarController.selectedViewController.view addSubview: adMobAd];
         }

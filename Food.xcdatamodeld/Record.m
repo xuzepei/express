@@ -17,5 +17,6 @@
 @dynamic name;
 @dynamic time;
 @dynamic desc;
+@dynamic note;
 
 @end
