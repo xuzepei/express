@@ -46,7 +46,7 @@
 	
 	
 	//快递列表
-	_unfitViewController = [[FDUnfitViewController alloc] initWithNibName:@"FDUnfitViewController" 
+	_unfitViewController = [[FDUnfitViewController alloc] initWithNibName:nil
 																		bundle:nil];
 
 	_unfitNavigationController = [[UINavigationController alloc] 

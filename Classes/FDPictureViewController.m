@@ -241,6 +241,9 @@
 			CGFloat offset_y = 20.0;
 			if(NO == [RCTool isIpad])
 			{
+                if([RCTool systemVersion] >= 7.0)
+                    offset_y += 64.0f;
+                
 				_label2.frame = CGRectMake(10,offset_y + 120,100,40);
 				_label2.font = [UIFont boldSystemFontOfSize:19];
 				
@@ -248,10 +251,13 @@
 			}
 			else 
 			{
-				_label2.frame = CGRectMake(20,offset_y + 270,400,60);
+                if([RCTool systemVersion] >= 7.0)
+                    offset_y = 100.0;
+                
+				_label2.frame = CGRectMake(80,offset_y + 270,400,60);
 				_label2.font = [UIFont boldSystemFontOfSize:30];
 				
-				_phoneNumLabel.frame =CGRectMake(120,offset_y + 282,600,60);
+				_phoneNumLabel.frame =CGRectMake(120 + 60,offset_y + 282,600,60);
 			}
 
 		}
@@ -282,6 +288,9 @@
 			CGFloat offset_y = 20.0;
 			if(NO == [RCTool isIpad])
 			{
+                if([RCTool systemVersion] >= 7.0)
+                    offset_y += 64.0f;
+                
 				_label3.frame = CGRectMake(10,offset_y + 166,100,40);
 				_label3.font = [UIFont boldSystemFontOfSize:19];
 				
@@ -289,10 +298,13 @@
 			}
 			else 
 			{
-				_label3.frame = CGRectMake(20,offset_y + 380,400,60);
+                if([RCTool systemVersion] >= 7.0)
+                    offset_y = 100.0;
+                
+				_label3.frame = CGRectMake(80,offset_y + 380,400,60);
 				_label3.font = [UIFont boldSystemFontOfSize:30];
 				
-				_webLabel.frame =CGRectMake(120,offset_y + 394,600,60);
+				_webLabel.frame =CGRectMake(120 + 60,offset_y + 394,600,60);
 			}
 			
 		}
@@ -384,10 +396,12 @@
 		}
 	}
 
-	
-	CGFloat offset_y = 20.0;
+    CGFloat offset_y = 20.0;
 	if(NO == [RCTool isIpad])
 	{
+        if([RCTool systemVersion] >= 7.0)
+            offset_y += 64.0;
+        
 		_selectExpressButton.frame = CGRectMake(60.0,offset_y,200,40);
 		_selectExpressButton.titleLabel.font = [UIFont boldSystemFontOfSize: 18];
 		_inputTF.frame = CGRectMake(60, offset_y + 60, 200, 40);
@@ -417,7 +431,11 @@
 	}
 	else 
 	{
-		offset_y = 100.0;
+        offset_y = 40.0;
+        
+        if([RCTool systemVersion] >= 7.0)
+            offset_y = 100.0;
+        
 		_selectExpressButton.frame = CGRectMake(([RCTool getScreenSize].width - 400.0)/2.0,offset_y,400,60);
 		_selectExpressButton.titleLabel.font = [UIFont boldSystemFontOfSize: 26];
 		_inputTF.frame = CGRectMake(([RCTool getScreenSize].width - 400.0)/2.0, offset_y + 120, 400, 60);

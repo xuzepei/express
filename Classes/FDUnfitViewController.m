@@ -86,12 +86,33 @@
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    if(nil == self.interstitial)
+    {
+        _interstitial = [[GADInterstitial alloc] init];
+        _interstitial.adUnitID = AD_ID;
+        _interstitial.delegate = self;
+        [_interstitial loadRequest:[GADRequest request]];
+    }
+    
 
     [self initTableView];
 	
 	[self updateContent];
 }
 
+- (void)interstitialDidReceiveAd:(GADInterstitial *)interstitial
+{
+    NSLog(@"interstitialDidReceiveAd");
+    
+    [self performSelector:@selector(showAD:) withObject:nil afterDelay:10];
+}
+
+- (void)showAD:(id)argument
+{
+    if(self.interstitial)
+        [self.interstitial presentFromRootViewController:self];
+}
 
 /*
  // Override to allow orientations other than the default portrait orientation.
@@ -135,6 +156,8 @@
     self.infoButton = nil;
 	[fetchedResultsController release];
 	[fetchedResultsController2 release];
+    
+    self.interstitial = nil;
 	
     [super dealloc];
 }

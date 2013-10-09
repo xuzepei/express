@@ -8,10 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "RCInfoViewController.h"
+#import "GADInterstitial.h"
 
 
 @interface FDUnfitViewController : UIViewController
-<UITableViewDelegate,UITableViewDataSource,UISearchBarDelegate,UISearchDisplayDelegate> 
+<UITableViewDelegate,UITableViewDataSource,UISearchBarDelegate,UISearchDisplayDelegate,GADInterstitialDelegate>
 {
 	
 	UITableView* _tableView;
@@ -37,6 +38,7 @@
 @property(nonatomic, retain)NSFetchedResultsController *fetchedResultsController;
 @property(nonatomic, retain)NSFetchedResultsController *fetchedResultsController2;
 @property(nonatomic, retain)UIButton* infoButton;
+@property(nonatomic,retain)GADInterstitial *interstitial;
 
 - (void)initTableView;
 - (void)updateContent;
