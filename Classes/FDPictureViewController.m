@@ -698,6 +698,8 @@
 		[alert release];
 		return;
 	}
+    
+    [RCTool showScreenAdView];
 	
 	
 	NSString* num = _inputTF.text;

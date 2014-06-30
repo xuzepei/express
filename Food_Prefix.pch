@@ -45,7 +45,6 @@ typedef enum {
 #define EMOJI_WIDTH 17.0
 
 #define AD_HEIGHT 50.0
-#define AD_ID @"a14ef04b44bd708"
 
 #define DETAIL_TEXT_COLOR [UIColor colorWithRed:0.01 green:0.18 blue:0.36 alpha:1.00]
 #define NAVIGATION_BAR_COLOR [UIColor colorWithRed:0.03 green:0.51 blue:1.00 alpha:1.00]
@@ -64,3 +63,15 @@ typedef enum {
 #define COLOR_3 [UIColor colorWithRed:0.04 green:0.38 blue:0.04 alpha:1.00]
 #define COLOR_4 [UIColor colorWithRed:1.00 green:0.09 blue:0.09 alpha:1.00]
 
+#define APP_URL @""
+
+//广告ID
+#define AD_ID @"a14ef04b44bd708"
+#define SCREEN_AD_ID @"a153a9766de2d6a"
+#define SCREEN_AD_RATE 5
+
+//UMeng 设置
+#define UMENG_APP_KEY @"53a97f0356240b244d045949"
+
+//获取协同信息URL
+#define APP_INFO_URL @"http://www.tapguilt.com/api/express.php"

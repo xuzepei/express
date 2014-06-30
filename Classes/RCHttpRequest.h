@@ -3,33 +3,17 @@
 //  rsscoffee
 //
 //  Created by xuzepei on 09-9-8.
-//  Copyright 2009 Rumtel Co.,Ltd. All rights reserved.
+//  Copyright 2009 SanguoTech Co.,Ltd. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 
 @protocol RCHttpRequestDelegate <NSObject>
 @optional
-- (void) willStartHttpRequest;
-- (void) willStartHttpRequest: (NSString*)urlString token:(id)token;
-- (void) didFinishHttpRequest;
-- (void) didFinishHttpRequest: (NSString*)urlString result:(id)result token:(id)token;
-- (void) didFailHttpRequest;
-- (void) didFailHttpRequest: (NSString*)urlString token:(id)token;
-
 - (void) willStartHttpRequest: (id)token;
-- (void) didFinishHttpRequest: (id)result;
 - (void) didFinishHttpRequest: (id)result token: (id)token;
 - (void) didFailHttpRequest: (id)token;
 - (void) updatePercentage: (float)percentage token: (id)token;
-- (void) didFinishADHttpRequest:(id)result token:(id)token;
-- (void) didFinishSendReview:(id)result token:(id)token;
-- (void) didFailSendReview: (id)token;
-
-- (void)didFinishSearchHttpRequest:(id)result token:(id)token;
-- (void)didFinishPublicHttpRequest:(id)result token:(id)token;
-- (void)didFinishSecondHttpRequest:(id)result token:(id)token;
-- (void)didFinishLocalStatusHttpRequest:(id)result token:(id)token;
 @end
 
 
@@ -46,12 +30,13 @@
 	long long _expectedContentLength;
 	long long _currentLength;
 	NSURLConnection* _urlConnection;
-
+    
+    NSTimer * _timeOutTimer;
 }
 
 @property (nonatomic, retain) NSMutableData* _receivedData;
 @property (nonatomic, assign) BOOL _isConnecting; 
-@property (nonatomic, assign) id _delegate;
+@property (assign) id _delegate;
 @property (assign) int _statusCode;
 @property (assign) int _contentType;
 @property (assign) int _requestType;
@@ -60,5 +45,16 @@
 @property (assign) long long _expectedContentLength;
 @property (assign) long long _currentLength;
 @property (nonatomic, retain) NSURLConnection* _urlConnection;
+
+@property(assign)SEL _resultSelector;
+
++ (RCHttpRequest*)sharedInstance;
+- (BOOL)request:(NSString*)urlString
+	   delegate:(id)delegate
+ resultSelector:(SEL)resultSelector //结果返回方法,仅限一个参数
+		  token:(id)token;
+- (BOOL)post:(NSString*)urlString delegate:(id)delegate resultSelector:(SEL)resultSelector token:(id)token;
+- (void)cancel;
+
 
 @end

@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "GADInterstitial.h"
 
 @interface RCTool : NSObject {
 
@@ -15,6 +16,7 @@
 + (NSString*)getUserDocumentDirectoryPath;
 + (NSString *)md5:(NSString *)str;
 + (CGFloat)systemVersion;
++ (NSDictionary*)parseToDictionary:(NSString*)jsonString;
 
 + (BOOL)isExistingFile:(NSString*)path;
 
@@ -47,6 +49,7 @@
 + (BOOL)isIpad;
 
 + (UIView*)getAdView;
++ (void)showScreenAdView;
 
 + (NSDictionary*)parse:(NSString*)jsonString;
 
@@ -77,5 +80,13 @@
 + (void)showAlert:(NSString*)aTitle message:(NSString*)message;
 
 + (BOOL)checkCrackedApp;
+
+#pragma mark - App Info
+
++ (NSString*)getAdId;
++ (NSString*)getScreenAdId;
++ (int)getScreenAdRate;
++ (NSString*)getAppURL;
++ (BOOL)isOpenAll;
 
 @end

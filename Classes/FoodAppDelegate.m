@@ -14,6 +14,8 @@
 #import "FDFavoriteViewController.h"
 #import "RCTool.h"
 #import "GADBannerView.h"
+#import "RCHttpRequest.h"
+#import "MobClick.h"
 
 @implementation FoodAppDelegate
 
@@ -35,22 +37,26 @@
 @synthesize _favoriteViewController;
 @synthesize _favoriteNavigationController;
 
-@synthesize adMobAd;
 
 #pragma mark -
 #pragma mark Application lifecycle
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-
+    
+    //UMeng
+    [MobClick startWithAppkey:UMENG_APP_KEY
+                 reportPolicy:SEND_INTERVAL
+                    channelId:nil];
+    
 	[RCTool importLocalData];
 	
 	
 	//快递列表
 	_unfitViewController = [[FDUnfitViewController alloc] initWithNibName:nil
-																		bundle:nil];
-
-	_unfitNavigationController = [[UINavigationController alloc] 
-									initWithRootViewController:_unfitViewController];
+                                                                   bundle:nil];
+    
+	_unfitNavigationController = [[UINavigationController alloc]
+                                  initWithRootViewController:_unfitViewController];
 	
 	_unfitNavigationController.navigationBar.tintColor = NAVIGATION_BAR_COLOR;
     
@@ -63,29 +69,29 @@
                                 initWithRootViewController:_fitViewController];
     
 	_fitNavigationController.navigationBar.tintColor = NAVIGATION_BAR_COLOR;
-
+    
 	
 	//快递查询
-	_pictureViewController = [[FDPictureViewController alloc] initWithNibName:@"FDPictureViewController" 
-																	 bundle:nil];
+	_pictureViewController = [[FDPictureViewController alloc] initWithNibName:@"FDPictureViewController"
+                                                                       bundle:nil];
 	
-	_pictureNavigationController = [[UINavigationController alloc] 
-								   initWithRootViewController:_pictureViewController];
-
+	_pictureNavigationController = [[UINavigationController alloc]
+                                    initWithRootViewController:_pictureViewController];
+    
 	_pictureNavigationController.navigationBar.tintColor = NAVIGATION_BAR_COLOR;
 	
-
-
+    
+    
 	//历史查询
-	_favoriteViewController = [[FDFavoriteViewController alloc] initWithNibName:@"FDFavoriteViewController" 
-																	   bundle:nil];
+	_favoriteViewController = [[FDFavoriteViewController alloc] initWithNibName:@"FDFavoriteViewController"
+                                                                         bundle:nil];
 	
-	_favoriteNavigationController = [[UINavigationController alloc] 
-									initWithRootViewController:_favoriteViewController];
+	_favoriteNavigationController = [[UINavigationController alloc]
+                                     initWithRootViewController:_favoriteViewController];
 	
 	_favoriteNavigationController.navigationBar.tintColor = NAVIGATION_BAR_COLOR;
 	
-	_tabBarController = [[WRSysTabBarController alloc] initWithNibName:@"WRSysTabBarController" 
+	_tabBarController = [[WRSysTabBarController alloc] initWithNibName:@"WRSysTabBarController"
 																bundle:nil];
 	
 	
@@ -102,7 +108,25 @@
 	
     [window addSubview:_tabBarController.view];
     [window makeKeyAndVisible];
-
+    
+    if([RCTool systemVersion] >=7.0)
+    {
+        [[UINavigationBar appearance] setBarTintColor:NAVIGATION_BAR_COLOR];
+        
+        //[[UITabBar appearance] setTintColor:NAVIGATION_BAR_COLOR];
+        //[[UITabBar appearance] setBarTintColor:TAB_BAR_COLOR];
+        
+        [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
+        
+//        NSShadow *shadow = [[[NSShadow alloc] init] autorelease];
+//        shadow.shadowColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.8];
+//        shadow.shadowOffset = CGSizeMake(1, 1);
+        
+        [[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor],
+                                                               NSFontAttributeName:[UIFont boldSystemFontOfSize:18]}];
+        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    }
+    
     return YES;
 }
 
@@ -117,7 +141,7 @@
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
     /*
-     Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
+     Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
      If your application supports background execution, called instead of applicationWillTerminate: when the user quits.
      */
     [self saveContext];
@@ -136,7 +160,8 @@
      Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
      */
     
-    [self getAD:nil];
+    self.showFullScreenAd = YES;
+    [self getAppInfo];
 }
 
 
@@ -161,9 +186,9 @@
              */
             NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
             abort();
-        } 
+        }
     }
-}    
+}
 
 
 #pragma mark -
@@ -199,7 +224,7 @@
     }
     NSString *modelPath = [[NSBundle mainBundle] pathForResource:@"Food" ofType:@"momd"];
     NSURL *modelURL = [NSURL fileURLWithPath:modelPath];
-    managedObjectModel_ = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];    
+    managedObjectModel_ = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
     return managedObjectModel_;
 }
 
@@ -240,7 +265,7 @@
          * Simply deleting the existing store:
          [[NSFileManager defaultManager] removeItemAtURL:storeURL error:nil]
          
-         * Performing automatic lightweight migration by passing the following dictionary as the options parameter: 
+         * Performing automatic lightweight migration by passing the following dictionary as the options parameter:
          [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES],NSMigratePersistentStoresAutomaticallyOption, [NSNumber numberWithBool:YES], NSInferMappingModelAutomaticallyOption, nil];
          
          Lightweight migration will only work for a limited set of schema changes; consult "Core Data Model Versioning and Data Migration Programming Guide" for details.
@@ -248,7 +273,7 @@
          */
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         abort();
-    }    
+    }
     
     return persistentStoreCoordinator_;
 }
@@ -299,96 +324,128 @@
 	[_tabBarController release];
     [window release];
 	
-	[adMobAd release];
+    self.adMobAd = nil;
+    self.adInterstitial = nil;
+    
+    self.adView = nil;
+    self.interstitial = nil;
+    
+    self.ad_id = nil;
 	
     [super dealloc];
 }
 
-#pragma mark -
-#pragma mark  AD
+#pragma mark - AdMob
+
+#pragma mark - App Info
+
+- (void)getAppInfo
+{
+    NSString* urlString = APP_INFO_URL;
+    
+    RCHttpRequest* temp = [RCHttpRequest sharedInstance];
+    [temp request:urlString delegate:self resultSelector:@selector(finishedGetAppInfoRequest:) token:nil];
+}
+
+- (void)finishedGetAppInfoRequest:(NSString*)jsonString
+{
+    if(0 == [jsonString length])
+    {
+        self.ad_id = [RCTool getAdId];
+        
+        [self getAD];
+        
+        return;
+    }
+    
+    NSDictionary* result = [RCTool parseToDictionary: jsonString];
+    if(result && [result isKindOfClass:[NSDictionary class]])
+    {
+        //保存用户信息
+        [[NSUserDefaults standardUserDefaults] setObject:result forKey:@"app_info"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        
+        self.ad_id = [RCTool getAdId];
+        
+        [self getAD];
+    }
+    
+}
 
 - (void)initAdMob
 {
+    if(_adMobAd && _adMobAd.alpha == 0.0 && nil == _adMobAd.superview)
+	{
+		[_adMobAd removeFromSuperview];
+		_adMobAd.delegate = nil;
+		[_adMobAd release];
+		_adMobAd = nil;
+	}
+    
 	if(NO == [RCTool isIpad])
 	{
-		adMobAd = [[GADBannerView alloc]
-				   initWithFrame:CGRectMake(0.0,0,
-											GAD_SIZE_320x50.width,
-											GAD_SIZE_320x50.height)];
+		_adMobAd = [[GADBannerView alloc]
+                    initWithFrame:CGRectMake(0.0,0,
+                                             320.0f,
+                                             50.0f)];
 	}
 	else
 	{
-		adMobAd = [[GADBannerView alloc]
-				   initWithFrame:CGRectMake((768 - GAD_SIZE_728x90.width)/2.0,
-											0,
-											GAD_SIZE_728x90.width,
-											GAD_SIZE_728x90.height)];
+        _adMobAd = [[GADBannerView alloc]
+                    initWithFrame:CGRectMake(0.0,0,
+                                             728.0f,
+                                             90.0f)];
 	}
 	
 	
 	
-	adMobAd.adUnitID = AD_ID;
-	adMobAd.delegate = self;
-	adMobAd.alpha = 0.0;
-	adMobAd.rootViewController = _tabBarController;
-	[adMobAd loadRequest:[GADRequest request]];
+	_adMobAd.adUnitID = [RCTool getAdId];
+	_adMobAd.delegate = self;
+	_adMobAd.alpha = 0.0;
+	_adMobAd.rootViewController = _tabBarController;
+	[_adMobAd loadRequest:[GADRequest request]];
 	
 }
 
-- (void)getAD:(id)agrument
+- (void)getAD
 {
 	NSLog(@"getAD");
-	
-	if(adMobAd && adMobAd.alpha == 0.0 && nil == adMobAd.superview)
-	{
-		[adMobAd removeFromSuperview];
-		adMobAd.delegate = nil;
-		[adMobAd release];
-		adMobAd = nil;
-	}
+    
+    if(self.adMobAd && self.adMobAd.superview)
+    {
+        [self.adMobAd removeFromSuperview];
+        self.adMobAd = nil;
+    }
+    
+    if(self.adView && self.adView.superview)
+    {
+        [self.adView removeFromSuperview];
+        self.adView = nil;
+    }
+    self.adInterstitial = nil;
+    self.interstitial = nil;
 	
 	[self initAdMob];
+    
+    [self getAdInterstitial];
 }
 
 #pragma mark -
 #pragma mark GADBannerDelegate methods
 
-- (UIViewController *)getVisibleViewController {
-    
-    UIViewController *visible = _tabBarController.selectedViewController; // For non-nav controllers
-	if ([visible respondsToSelector:@selector(visibleViewController)]) // For nav controllers
-		visible = [((UINavigationController*)visible) visibleViewController];
-    
-    return visible;
-}
-
 - (void)adViewDidReceiveAd:(GADBannerView *)bannerView
 {
 	NSLog(@"adViewDidReceiveAd");
 	
-    if(nil == adMobAd.superview && adMobAd.alpha == 0.0)
+    if(nil == _adMobAd.superview && _adMobAd.alpha == 0.0)
     {
-        adMobAd.alpha = 1.0;
-        NSLog(@"%@",[self getVisibleViewController]);
-        
-        UIViewController* visibleViewController = [self getVisibleViewController];
-        if([visibleViewController isKindOfClass:[FDPictureViewController class]])
-        {
-            CGRect rect = adMobAd.frame;
-            
-            if([RCTool systemVersion] >= 7.0)
-            {
-                rect.origin.y = [RCTool getScreenSize].height -TAB_BAR_HEIGHT - adMobAd.frame.size.height;
-                adMobAd.frame = rect;
-            }
-            else
-            {
-                rect.origin.y = [RCTool getScreenSize].height - STATUS_BAR_HEIGHT - NAVIGATION_BAR_HEIGHT - TAB_BAR_HEIGHT - adMobAd.frame.size.height;
-                adMobAd.frame = rect;
-            }
-            
-            [_tabBarController.selectedViewController.view addSubview: adMobAd];
-        }
+        _adMobAd.alpha = 1.0;
+        CGRect rect = _adMobAd.frame;
+        rect.origin.x = ([RCTool getScreenSize].width - rect.size.width)/2.0;
+        rect.origin.y = [RCTool getScreenSize].height;
+        _adMobAd.frame = rect;
+ 
+        self.isAdMobVisible = NO;
     }
 }
 
@@ -396,9 +453,128 @@
 didFailToReceiveAdWithError:(GADRequestError *)error
 {
 	NSLog(@"didFailToReceiveAdWithError");
+    
+    self.isAdMobVisible = NO;
+    
+    [self initAdView];
+}
 
-	[self performSelector:@selector(getAD:) 
-			   withObject:nil afterDelay:10];
+- (void)getAdInterstitial
+{
+    if(nil == self.adInterstitial && [self.ad_id length])
+    {
+        _adInterstitial = [[GADInterstitial alloc] init];
+        _adInterstitial.adUnitID = [RCTool getScreenAdId];
+        _adInterstitial.delegate = self;
+    }
+    
+    [_adInterstitial loadRequest:[GADRequest request]];
+}
+
+- (void)interstitialDidReceiveAd:(GADInterstitial *)interstitial
+{
+    NSLog(@"interstitialDidReceiveAd");
+    
+    if(self.showFullScreenAd)
+    {
+        self.showFullScreenAd = NO;
+        [self showInterstitialAd:nil];
+    }
+    
+}
+
+- (void)interstitial:(GADInterstitial *)ad
+didFailToReceiveAdWithError:(GADRequestError *)error
+{
+    NSLog(@"%s",__FUNCTION__);
+    
+    [self initInterstitial];
+}
+
+- (void)interstitialDidDismissScreen:(GADInterstitial *)ad
+{
+    self.adInterstitial = nil;
+    [self getAdInterstitial];
+}
+
+- (void)showInterstitialAd:(id)argument
+{
+    if(self.adInterstitial)
+    {
+        [self.adInterstitial presentFromRootViewController:_tabBarController.selectedViewController];
+    }
+    else if(self.interstitial && self.interstitial.loaded)
+    {
+        [self.interstitial presentFromViewController:_tabBarController.selectedViewController];
+    }
+}
+
+#pragma mark - iAd
+
+- (void)initAdView
+{
+    if(nil == _adView)
+        _adView = [[ADBannerView alloc] initWithAdType:ADAdTypeBanner];
+    _adView.delegate = self;
+    CGRect rect = _adView.frame;
+    rect.origin.y = [RCTool getScreenSize].height;
+    _adView.frame = rect;
+    
+    self.isAdViewVisible = NO;
+}
+
+- (void)bannerViewDidLoadAd:(ADBannerView *)banner
+{
+    NSLog(@"iAd,bannerViewDidLoadAd");
+    
+    //[[RCTool getRootNavigationController].topViewController.view addSubview:_adView];
+}
+
+- (void)bannerView:(ADBannerView *)banner didFailToReceiveAdWithError:(NSError *)error
+{
+    NSLog(@"iAd,didFailToReceiveAdWithError");
+    
+    self.isAdViewVisible = NO;
+    [self.adView removeFromSuperview];
+    self.adView = nil;
+    
+    //如果iAd失败，则调用admob
+    [self performSelector:@selector(initAdMob) withObject:nil afterDelay:3];
+}
+
+- (void)initInterstitial
+{
+    if(NO == [RCTool isIpad])
+        return;
+    
+    if(nil == _interstitial)
+    {
+        _interstitial = [[ADInterstitialAd alloc] init];
+        _interstitial.delegate = self;
+    }
+    
+}
+
+- (void)interstitialAdDidLoad:(ADInterstitialAd *)interstitialAd
+{
+    NSLog(@"iAd,interstitialAdDidLoad");
+    
+
+}
+
+- (void)interstitialAdDidUnload:(ADInterstitialAd *)interstitialAd
+{
+    NSLog(@"iAd,interstitialAdDidUnload");
+    self.interstitial = nil;
+}
+
+- (void)interstitialAd:(ADInterstitialAd *)interstitialAd didFailWithError:(NSError *)error
+{
+    NSLog(@"iAd,interstitialAd <%@> recieved error <%@>", interstitialAd, error);
+    self.interstitial = nil;
+    
+    //尝试调用Admob的全屏广告
+    [self getAdInterstitial];
 }
 
 

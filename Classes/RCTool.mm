@@ -54,6 +54,31 @@ void systemSoundCompletionProc(SystemSoundID ssID,void *clientData)
 			];	
 }
 
++ (NSDictionary*)parseToDictionary:(NSString*)jsonString
+{
+    if(0 == [jsonString length])
+		return nil;
+    
+    
+	SBJSON* sbjson = [[SBJSON alloc] init];
+    
+    NSError* error = nil;
+	NSDictionary* dict = [sbjson objectWithString:jsonString error:&error];
+    
+    if(error)
+        NSLog(@"error:%@",[error description]);
+	
+	if(dict && [dict isKindOfClass:[NSDictionary class]])
+	{
+        [sbjson release];
+        return dict;
+	}
+	
+	[sbjson release];
+    
+	return nil;
+}
+
 
 #pragma mark -
 #pragma mark network
@@ -367,6 +392,12 @@ void systemSoundCompletionProc(SystemSoundID ssID,void *clientData)
 	return nil;
 }
 
++ (void)showScreenAdView
+{
+	FoodAppDelegate* appDelegate = (FoodAppDelegate*)[[UIApplication sharedApplication] delegate];
+    [appDelegate showInterstitialAd:nil];
+}
+
 + (NSDictionary*)parse:(NSString*)jsonString
 {
 	if(0 == [jsonString length])
@@ -575,6 +606,86 @@ void systemSoundCompletionProc(SystemSoundID ssID,void *clientData)
     }
     
     return isCraked;
+}
+
+#pragma mark - App Info
+
++ (NSString*)getAdId
+{
+    NSDictionary* app_info = [[NSUserDefaults standardUserDefaults] objectForKey:@"app_info"];
+    if(app_info && [app_info isKindOfClass:[NSDictionary class]])
+    {
+        NSString* ad_id = [app_info objectForKey:@"ad_id"];
+        if([ad_id length])
+            return ad_id;
+    }
+    
+    return AD_ID;
+}
+
++ (NSString*)getScreenAdId
+{
+    NSDictionary* app_info = [[NSUserDefaults standardUserDefaults] objectForKey:@"app_info"];
+    if(app_info && [app_info isKindOfClass:[NSDictionary class]])
+    {
+        NSString* ad_id = [app_info objectForKey:@"mediation_id"];
+        if(0 == [ad_id length])
+            ad_id = [app_info objectForKey:@"screen_ad_id"];
+        
+        if([ad_id length])
+            return ad_id;
+    }
+    
+    return SCREEN_AD_ID;
+}
+
++ (int)getScreenAdRate
+{
+    NSDictionary* app_info = [[NSUserDefaults standardUserDefaults] objectForKey:@"app_info"];
+    if(app_info && [app_info isKindOfClass:[NSDictionary class]])
+    {
+        NSString* ad_rate = [app_info objectForKey:@"screen_ad_rate"];
+        if([ad_rate intValue] > 0)
+            return [ad_rate intValue];
+    }
+    
+    return SCREEN_AD_RATE;
+}
+
++ (NSString*)getAppURL
+{
+    NSDictionary* app_info = [[NSUserDefaults standardUserDefaults] objectForKey:@"app_info"];
+    if(app_info && [app_info isKindOfClass:[NSDictionary class]])
+    {
+        NSString* link = [app_info objectForKey:@"link"];
+        if([link length])
+            return link;
+    }
+    
+    return APP_URL;
+}
+
++ (BOOL)isOpenAll
+{
+    NSDictionary* app_info = [[NSUserDefaults standardUserDefaults] objectForKey:@"app_info"];
+    if(app_info && [app_info isKindOfClass:[NSDictionary class]])
+    {
+        NSString* openall = [app_info objectForKey:@"openall"];
+        if([openall isEqualToString:@"1"])
+            return YES;
+    }
+    else
+    {
+        NSDate* date = [[[NSDate alloc] initWithString:@"2014-04-1 12:06:04 +0800"] autorelease];
+        NSDate* startDate = [NSDate date];
+        
+        if([startDate timeIntervalSinceDate:date] >= 14*24*60*60)
+        {
+            return YES;
+        }
+    }
+    
+    return NO;
 }
 
 @end

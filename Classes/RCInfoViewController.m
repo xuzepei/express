@@ -64,9 +64,6 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if(SECTION_HELP == section)
-        return 2;
-
     return 1;
 }
 

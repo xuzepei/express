@@ -2,42 +2,39 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>F3F7B4C8-2F7C-4A4B-BD84-D255FD3DA89D</string>
+	<string>BEF4CCA4-CBC3-449B-8123-2F3C3753BCEF</string>
 	<key>IDESourceControlProjectName</key>
 	<string>Food</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>48806E80-5466-497E-AABE-96764847A944</key>
-		<string>http://xuzepei.unfuddle.com/svn/xuzepei_expressios</string>
+		<key>3B85833B-852C-42F2-9522-7610D74C569F</key>
+		<string>https://github.com/xuzepei/express.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>Food.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>48806E80-5466-497E-AABE-96764847A944</key>
+		<key>3B85833B-852C-42F2-9522-7610D74C569F</key>
 		<string>../..</string>
 	</dict>
-	<key>IDESourceControlProjectRepositoryRootDictionary</key>
-	<dict>
-		<key>48806E80-5466-497E-AABE-96764847A944</key>
-		<string>http://xuzepei.unfuddle.com/svn/xuzepei_expressios</string>
-	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>http://xuzepei.unfuddle.com/svn/xuzepei_expressios/Food.xcodeproj</string>
+	<string>https://github.com/xuzepei/express.git</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>110</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>48806E80-5466-497E-AABE-96764847A944</string>
+	<string>3B85833B-852C-42F2-9522-7610D74C569F</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
-			<string>public.vcs.subversion</string>
+			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>48806E80-5466-497E-AABE-96764847A944</string>
+			<string>3B85833B-852C-42F2-9522-7610D74C569F</string>
 			<key>IDESourceControlWCCName</key>
-			<string>express_trunk</string>
+			<string>express_git</string>
 		</dict>
 	</array>
 </dict>

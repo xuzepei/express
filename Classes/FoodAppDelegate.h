@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
 #import "GADBannerView.h"
+#import "GADInterstitial.h"
+#import <iAd/iAd.h>
 
 @class WRSysTabBarController;
 @class FDUnfitViewController;
@@ -16,7 +18,7 @@
 @class FDSearchViewController;
 @class FDPictureViewController;
 @class FDFavoriteViewController;
-@interface FoodAppDelegate : NSObject <UIApplicationDelegate,GADBannerViewDelegate> {
+@interface FoodAppDelegate : NSObject <UIApplicationDelegate,GADBannerViewDelegate,GADInterstitialDelegate,ADBannerViewDelegate,ADInterstitialAdDelegate> {
     
     UIWindow *window;
     WRSysTabBarController* _tabBarController;
@@ -35,8 +37,6 @@
 	
 	FDFavoriteViewController* _favoriteViewController;
 	UINavigationController* _favoriteNavigationController;
-	
-	GADBannerView *adMobAd;
 
 @private
     NSManagedObjectContext *managedObjectContext_;
@@ -67,9 +67,19 @@
 @property (nonatomic, retain, readonly) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
 @property (nonatomic, retain) GADBannerView *adMobAd;
+@property (assign)BOOL isAdMobVisible;
+@property (nonatomic, retain) GADInterstitial *adInterstitial;
+
+@property (nonatomic, retain) ADBannerView *adView;
+@property (assign)BOOL isAdViewVisible;
+@property (nonatomic, retain) ADInterstitialAd* interstitial;
+
+@property (nonatomic,retain) NSString* ad_id;
+@property (nonatomic,assign)BOOL showFullScreenAd;
 
 - (NSURL *)applicationDocumentsDirectory;
 - (void)saveContext;
+- (void)showInterstitialAd:(id)argument;
 
 @end
 

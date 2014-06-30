@@ -45,24 +45,6 @@
 {
 	[super viewWillAppear: animated];
 	
-//    CGFloat adHeight = 0.0;
-//	UIView* adView = [RCTool getAdView];
-//	if(adView)
-//	{
-//        adHeight = adView.bounds.size.height;
-//		CGRect rect = adView.frame;
-//        rect.origin.y = self.view.frame.size.height - adView.frame.size.height;
-//		adView.frame = rect;
-//		
-//		[self.view addSubview:adView];
-//	}
-//    
-//    if(_tableView)
-//    {
-//        _tableView.frame = CGRectMake(0,0,self.view.frame.size.width,self.view.frame.size.height - adHeight);
-//        [_tableView reloadData];
-//    }
-    
     if(_infoButton)
         _infoButton.hidden = NO;
 }
@@ -86,32 +68,10 @@
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    if(nil == self.interstitial)
-    {
-        _interstitial = [[GADInterstitial alloc] init];
-        _interstitial.adUnitID = AD_ID;
-        _interstitial.delegate = self;
-        [_interstitial loadRequest:[GADRequest request]];
-    }
-    
 
     [self initTableView];
 	
 	[self updateContent];
-}
-
-- (void)interstitialDidReceiveAd:(GADInterstitial *)interstitial
-{
-    NSLog(@"interstitialDidReceiveAd");
-    
-    [self performSelector:@selector(showAD:) withObject:nil afterDelay:10];
-}
-
-- (void)showAD:(id)argument
-{
-    if(self.interstitial)
-        [self.interstitial presentFromRootViewController:self];
 }
 
 /*
@@ -186,7 +146,6 @@
     
 	_searchBar.barStyle = UIBarStyleDefault;
 	_searchBar.placeholder = NSLocalizedString(@"输入快递名称搜索",@"");
-	_searchBar.tintColor = [UIColor colorWithRed:0.74 green:0.77 blue:0.80 alpha:1.00];
 	_searchBar.autocorrectionType = UITextAutocorrectionTypeNo;
 	_searchBar.autocapitalizationType = UITextAutocapitalizationTypeNone;
 	_searchBar.delegate=self;
@@ -544,6 +503,7 @@ titleForHeaderInSection:(NSInteger)section
     NSLog(@"clickedInfoButton");
     
     RCInfoViewController *temp = [[RCInfoViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    temp.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:temp animated:YES];
     [temp release];
 }
