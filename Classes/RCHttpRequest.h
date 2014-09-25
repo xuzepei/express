@@ -3,7 +3,7 @@
 //  rsscoffee
 //
 //  Created by xuzepei on 09-9-8.
-//  Copyright 2009 SanguoTech Co.,Ltd. All rights reserved.
+//  Copyright 2009 Rumtel Co.,Ltd. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -18,35 +18,22 @@
 
 
 @interface RCHttpRequest : NSObject {
-	
-	NSMutableData* _receivedData;
-	BOOL _isConnecting;
-	id _delegate;
-	int _statusCode;
-	int _contentType;
-	int _requestType;
-	NSString* _requestingURL;
-	id _token;
-	long long _expectedContentLength;
-	long long _currentLength;
-	NSURLConnection* _urlConnection;
-    
-    NSTimer * _timeOutTimer;
+
 }
 
-@property (nonatomic, retain) NSMutableData* _receivedData;
-@property (nonatomic, assign) BOOL _isConnecting; 
-@property (assign) id _delegate;
-@property (assign) int _statusCode;
-@property (assign) int _contentType;
-@property (assign) int _requestType;
-@property (nonatomic, retain) NSString* _requestingURL;
-@property (nonatomic, retain) id _token;
-@property (assign) long long _expectedContentLength;
-@property (assign) long long _currentLength;
-@property (nonatomic, retain) NSURLConnection* _urlConnection;
-
-@property(assign)SEL _resultSelector;
+@property (nonatomic, strong)NSMutableData* receivedData;
+@property (assign)BOOL isConnecting;
+@property (nonatomic, weak)id delegate;
+@property (assign)int statusCode;
+@property (assign)int contentType;
+@property (assign)int requestType;
+@property (nonatomic, strong)NSString* requestingURL;
+@property (nonatomic, strong)id token;
+@property (assign)long long expectedContentLength;
+@property (assign)long long currentLength;
+@property (nonatomic, strong)NSURLConnection* urlConnection;
+@property(assign)SEL resultSelector;
+@property (nonatomic, strong)NSTimer* timeOutTimer;
 
 + (RCHttpRequest*)sharedInstance;
 - (BOOL)request:(NSString*)urlString

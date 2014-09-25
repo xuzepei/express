@@ -138,7 +138,7 @@
 
 - (void)clickCancelButtonItem:(id)sender
 {
-	[self dismissModalViewControllerAnimated:YES];
+	[self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark -
@@ -382,7 +382,7 @@ titleForHeaderInSection:(NSInteger)section
 			[_delegate updateSelectedExpress: express];
 		}
 		
-		[self dismissModalViewControllerAnimated: YES];
+		[self dismissViewControllerAnimated:YES completion:nil];
 	}
 }
 

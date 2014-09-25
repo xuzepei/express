@@ -11,7 +11,7 @@
 #import "MyView.h"
 #import "Express.h"
 #import "FDSelectExpressViewController.h"
-#import "RCInquiryHttpRequest.h"
+#import "RCHttpRequest.h"
 #import "FDResultViewController.h"
 #import "Record.h"
 #import <QuartzCore/QuartzCore.h>
@@ -43,7 +43,7 @@
     if (self) {
 
 		UITabBarItem* item = [[UITabBarItem alloc] initWithTitle:@""
-														   image:[UIImage imageNamed:@"inquiry.png"]
+														   image:[UIImage imageNamed:@"tab_item_2"]
 															 tag: TT_PICTURE];
 		self.tabBarItem = item;
 		[item release];
@@ -347,6 +347,7 @@
 	_inputTF.delegate = self;
 	_inputTF.clearButtonMode = UITextFieldViewModeWhileEditing;
 	_inputTF.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+    _inputTF.textAlignment = NSTextAlignmentCenter;
 	_inputTF.adjustsFontSizeToFitWidth = NO;
 	_inputTF.autocorrectionType = UITextAutocorrectionTypeNo;
 	_inputTF.autocapitalizationType = UITextAutocapitalizationTypeNone;
@@ -355,7 +356,7 @@
 	[self.view addSubview: _inputTF];
     
     self._scanButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [_scanButton setImage:[UIImage imageNamed:@"scan_button.png"] forState:UIControlStateNormal];
+    [_scanButton setImage:[UIImage imageNamed:@"scan_button"] forState:UIControlStateNormal];
 	[_scanButton addTarget:self action:@selector(clickedScanButton:)
 				   forControlEvents:UIControlEventTouchUpInside];
 	[self.view addSubview: _scanButton];
@@ -473,9 +474,10 @@
 	temp._delegate = self;
 	UINavigationController* tempNavigationController = [[UINavigationController alloc] initWithRootViewController:temp];
     tempNavigationController.navigationBar.tintColor = NAVIGATION_BAR_COLOR;
+    [tempNavigationController.navigationBar setTintColor:[UIColor whiteColor]];
 	[temp release];
 
-	[self presentModalViewController:tempNavigationController animated:YES];
+	[self presentViewController:tempNavigationController animated:YES completion:nil];
     [tempNavigationController release];
 
 }
@@ -498,8 +500,7 @@
                        to: 0];
     
     // present and release the controller
-    [self presentModalViewController: reader
-                            animated: YES];
+    [self presentViewController:reader animated:YES completion:nil];
     [reader release];
 }
 
@@ -520,7 +521,7 @@
         _inputTF.text = symbol.data;
     
 
-    [reader dismissModalViewControllerAnimated: YES];
+    [reader dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)clickInquiryButton:(id)sender
@@ -568,20 +569,47 @@
             valicode = @"13982260600";
         }
         
-		NSString* urlString = @"http://api.kuaidi100.com/api";
-        NSMutableDictionary* token = [[NSMutableDictionary alloc] init];
-        if([code length])
-            [token setObject:code forKey:@"com"];
-        if([number length])
-            [token setObject:number forKey:@"nu"];
-        if([key length])
-            [token setObject:key forKey:@"id"];
-        if([valicode length])
-            [token setObject:valicode forKey:@"valicode"];
+//		NSString* urlString = @"http://api.kuaidi100.com/api";
+//        NSMutableDictionary* token = [[NSMutableDictionary alloc] init];
+//        if([code length])
+//            [token setObject:code forKey:@"com"];
+//        if([number length])
+//            [token setObject:number forKey:@"nu"];
+//        if([key length])
+//            [token setObject:key forKey:@"id"];
+//        if([valicode length])
+//            [token setObject:valicode forKey:@"valicode"];
+//        
+//		RCInquiryHttpRequest* temp = [RCInquiryHttpRequest sharedInstance];
+//		[temp request:urlString delegate:self token:token];
+//        [token release];
         
-		RCInquiryHttpRequest* temp = [RCInquiryHttpRequest sharedInstance];
-		[temp request:urlString delegate:self token:token];
-        [token release];
+        
+        NSString* urlString = [RCTool getUrlByType:0];
+        NSMutableString* token = [[NSMutableString alloc] init];
+        if([code length])
+            [token appendFormat:@"com=%@",code];
+        if([number length])
+            [token appendFormat:@"&nu=%@",number];
+        if([key length])
+            [token appendFormat:@"&id=%@",key];
+        if([valicode length])
+            [token appendFormat:@"&valicode=%@",valicode];
+        
+        [token appendString:@"&muti=1&order=desc&show=0"];
+        
+        //		RCInquiryHttpRequest* temp = [RCInquiryHttpRequest sharedInstance];
+        //		[temp request:urlString delegate:self token:token];
+        //        [token release];
+        
+        RCHttpRequest* temp = [RCHttpRequest sharedInstance];
+        BOOL b = [temp post:urlString delegate:self resultSelector:@selector(finishedRequest:) token:token];
+        if(b)
+        {
+            UIWindow* frontWindow = [RCTool frontWindow];
+            [frontWindow addSubview: _indicator];
+            [_indicator show:YES];
+        }
 		
 	}
 	else
@@ -597,6 +625,108 @@
 	
 
 
+}
+
+- (void)finishedRequest:(NSDictionary*)result
+{
+    [_indicator hide:YES];
+    
+    if(nil == result)
+    {
+        [RCTool showAlert:@"对不起" message:@"查询失败，请检查网络，稍候尝试。"];
+        return;
+    }
+    
+    NSString* json = [result objectForKey:@"json"];
+    if(0 == [json length])
+    {
+        [RCTool showAlert:@"对不起" message:@"查询失败，请检查网络，稍候尝试。"];
+        return;
+    }
+    
+    NSDictionary* dict = [RCTool parseToDictionary:json];
+    if(nil == dict)
+    {
+        [RCTool showAlert:@"对不起" message:@"查询失败，请检查网络，稍候尝试。"];
+        return;
+    }
+    
+    //status： 结果状态（返回0、1和408。0，表示无查询结果；1，表示查询成功 ）
+    
+    //state:快递单当前的状态 。0：在途中,1：已发货，2：疑难件，3： 已签收 ，4：已退货。
+    
+    NSString* status = [dict objectForKey:@"status"];
+    if(NO == [status isEqualToString:@"1"])
+    {
+        NSString* message = [dict objectForKey:@"message"];
+        if(0 == [message length])
+            message = @"无查询结果,请确认快递单号填写正确。";
+        
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"对不起"
+                                                        message:message
+                                                       delegate:nil
+                                              cancelButtonTitle:@"确定"
+                                              otherButtonTitles:nil];
+        [alert show];
+        [alert release];
+        return;
+    }
+    
+    [RCTool showScreenAdView];
+    
+    
+    NSString* num = _inputTF.text;
+    NSString* code = _selectedExpress.code;
+    NSString* name = _selectedExpress.name;
+    NSString* time = [NSString stringWithFormat:@"%lf",[[NSDate date] timeIntervalSince1970]];
+    NSRange range = [time rangeOfString:@"."];
+    if(NSNotFound == range.location)
+        time = [time substringToIndex:range.location];
+    
+    _selectedExpress.num = num;
+    //_inputTF.text = @"";
+    
+    NSManagedObjectContext* insertionContext = [RCTool getManagedObjectContext];
+    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"code = %@ && num = %@",code,num];
+    NSManagedObjectID* objectID = [RCTool getExistingEntityObjectIDForName: @"Record"
+                                                                 predicate: predicate
+                                                           sortDescriptors: nil
+                                                                   context: insertionContext];
+    
+    
+    Record* record = nil;
+    if(nil == objectID)
+    {
+        record = [RCTool insertEntityObjectForName:@"Record"
+                              managedObjectContext:insertionContext];
+    }
+    else
+    {
+        record = (Record*)[RCTool insertEntityObjectForID:objectID
+                                     managedObjectContext:insertionContext];
+    }
+    
+    record.name = name;
+    record.code = code;
+    record.num = num;
+    record.time = time;
+    record.isHidden = [NSNumber numberWithBool:NO];
+    
+    [RCTool saveCoreData];
+    
+    [RCTool saveResult:dict time:time];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"updateContent" 
+                                                        object:nil];
+    
+    FDResultViewController* temp = [[FDResultViewController alloc] initWithNibName:@"FDResultViewController"
+                                                                            bundle:nil];
+    [temp updateContent: record];
+    temp.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:temp animated:YES];
+    [temp release];
+    
+    
 }
 
 #pragma mark -

@@ -17,6 +17,8 @@
 #import "RCHttpRequest.h"
 #import "MobClick.h"
 
+#define APP_ALERT 111
+
 @implementation FoodAppDelegate
 
 @synthesize window;
@@ -115,6 +117,11 @@
         
         //[[UITabBar appearance] setTintColor:NAVIGATION_BAR_COLOR];
         //[[UITabBar appearance] setBarTintColor:TAB_BAR_COLOR];
+
+        UIFont* font = [UIFont fontWithName:@"HelveticaNeue-Light" size:12];
+        
+        [[UITabBarItem appearance] setTitleTextAttributes:@{NSFontAttributeName:font}
+                                      forState:UIControlStateNormal];
         
         [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
         
@@ -335,8 +342,6 @@
     [super dealloc];
 }
 
-#pragma mark - AdMob
-
 #pragma mark - App Info
 
 - (void)getAppInfo
@@ -358,12 +363,14 @@
         return;
     }
     
-    NSDictionary* result = [RCTool parseToDictionary: jsonString];
+    NSDictionary* result = [RCTool parseToDictionary:[RCTool decrypt:jsonString]];
     if(result && [result isKindOfClass:[NSDictionary class]])
     {
         //保存用户信息
         [[NSUserDefaults standardUserDefaults] setObject:result forKey:@"app_info"];
         [[NSUserDefaults standardUserDefaults] synchronize];
+        
+        [self doAlert];
         
         self.ad_id = [RCTool getAdId];
         
@@ -371,6 +378,8 @@
     }
     
 }
+
+#pragma mark - AdMob
 
 - (void)initAdMob
 {
@@ -456,7 +465,7 @@ didFailToReceiveAdWithError:(GADRequestError *)error
     
     self.isAdMobVisible = NO;
     
-    [self initAdView];
+    [self performSelector:@selector(initAdMob) withObject:nil afterDelay:10];
 }
 
 - (void)getAdInterstitial
@@ -488,7 +497,7 @@ didFailToReceiveAdWithError:(GADRequestError *)error
 {
     NSLog(@"%s",__FUNCTION__);
     
-    [self initInterstitial];
+    [self performSelector:@selector(getAdInterstitial) withObject:nil afterDelay:10];
 }
 
 - (void)interstitialDidDismissScreen:(GADInterstitial *)ad
@@ -575,6 +584,74 @@ didFailToReceiveAdWithError:(GADRequestError *)error
     
     //尝试调用Admob的全屏广告
     [self getAdInterstitial];
+}
+
+#pragma mark - App Info
+
+- (void)doAlert
+{
+    NSDictionary* alert = [RCTool getAlert];
+    if(alert)
+    {
+        NSString* id = [alert objectForKey:@"id"];
+        if([id length])
+        {
+            NSString* record = [[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"alert_%@",id]];
+            
+            if([record length])
+                return;
+            else
+            {
+                [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:[NSString stringWithFormat:@"alert_%@",id]];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+            }
+        }
+        
+        int type = [[alert objectForKey:@"type"] intValue];
+        NSString* title = [alert objectForKey:@"title"];
+        NSString* message = [alert objectForKey:@"message"];
+        
+        NSString* b0_name = @"Cancel";
+        b0_name = [alert objectForKey:@"b0_name"];
+        
+        NSString* b1_name = @"OK";
+        b1_name = [alert objectForKey:@"b1_name"];
+        
+        if(0 == type)
+        {
+            UIAlertView* temp = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:b0_name otherButtonTitles:nil];
+            temp.tag = APP_ALERT;
+            [temp show];
+        }
+        else
+        {
+            UIAlertView* temp = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:b0_name otherButtonTitles:b1_name,nil];
+            temp.tag = APP_ALERT;
+            [temp show];
+        }
+    }
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if(APP_ALERT == alertView.tag)
+    {
+        NSLog(@"%d",buttonIndex);
+        
+        NSDictionary* alert = [RCTool getAlert];
+        if(alert)
+        {
+            int type = [[alert objectForKey:@"type"] intValue];
+            if(0 == type || (1 == type && 1 == buttonIndex))
+            {
+                NSString* urlString = [alert objectForKey:@"url"];
+                if([urlString length])
+                {
+                    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlString]];
+                }
+            }
+        }
+    }
 }
 
 

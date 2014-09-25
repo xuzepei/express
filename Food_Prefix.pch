@@ -63,15 +63,20 @@ typedef enum {
 #define COLOR_3 [UIColor colorWithRed:0.04 green:0.38 blue:0.04 alpha:1.00]
 #define COLOR_4 [UIColor colorWithRed:1.00 green:0.09 blue:0.09 alpha:1.00]
 
-#define APP_URL @""
+#define APP_URL @"https://itunes.apple.com/app/id490990930?mt=8"
 
 //广告ID
-#define AD_ID @"a14ef04b44bd708"
-#define SCREEN_AD_ID @"a153a9766de2d6a"
+#define AD_ID @"ca-app-pub-1207330468801232/1794642383"
+#define SCREEN_AD_ID @"ca-app-pub-1207330468801232/3271375584"
 #define SCREEN_AD_RATE 5
 
 //UMeng 设置
 #define UMENG_APP_KEY @"53a97f0356240b244d045949"
 
 //获取协同信息URL
-#define APP_INFO_URL @"http://www.tapguilt.com/api/express.php"
+#define APP_INFO_URL @"http://www.tapguilt.com/api/express.php?v=1.7"
+
+//密钥
+#define SECRET_KEY @"20140925"
+
+#define URL_0 @"http://api.kuaidi100.com/api"

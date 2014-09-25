@@ -3,7 +3,7 @@
 //  rsscoffee
 //
 //  Created by xuzepei on 09-9-8.
-//  Copyright 2009 SanguoTech Co.,Ltd. All rights reserved.
+//  Copyright 2009 Rumtel Co.,Ltd. All rights reserved.
 //
 
 //下载父类，用做继承
@@ -12,18 +12,6 @@
 
 
 @implementation RCHttpRequest
-@synthesize _receivedData;
-@synthesize _isConnecting;
-@synthesize _delegate;
-@synthesize _statusCode;
-@synthesize _contentType;
-@synthesize _requestType;
-@synthesize _requestingURL;
-@synthesize _token;
-@synthesize _expectedContentLength;
-@synthesize _currentLength;
-@synthesize _urlConnection;
-@synthesize _resultSelector;
 
 + (RCHttpRequest*)sharedInstance
 {
@@ -61,41 +49,21 @@
 {
     if (_timeOutTimer) {
         [_timeOutTimer invalidate];
-        [_timeOutTimer release];
         _timeOutTimer = nil;
     }
     
-	_isConnecting = NO;
-    if(_receivedData)
-    {
-        [_receivedData release];
-        _receivedData = nil;
-    }
-    
-	self._delegate = nil;
-    
-    if(_requestingURL)
-    {
-        [_requestingURL release];
-        _requestingURL =nil;
-    }
-    
-    if(_token)
-    {
-        [_token release];
-        _token =nil;
-    }
-    
-	self._urlConnection = nil;
+	self.isConnecting = NO;
+    self.receivedData = nil;
+    self.requestingURL = nil;
+    self.token = nil;
+	self.urlConnection = nil;
 	
-	[super dealloc];
 }
 
 - (void)cancel
 {
     if (_timeOutTimer) {
         [_timeOutTimer invalidate];
-        [_timeOutTimer release];
         _timeOutTimer = nil;
     }
     
@@ -106,8 +74,8 @@
     }
     
     _isConnecting = NO;
-    self._receivedData = nil;
-	self._urlConnection = nil;
+    self.receivedData = nil;
+	self.urlConnection = nil;
 }
 
 - (BOOL)request:(NSString*)urlString delegate:(id)delegate resultSelector:(SEL)resultSelector token:(id)token
@@ -115,11 +83,11 @@
     if(0 == [urlString length] || _isConnecting)
         return NO;
     
-    self._resultSelector = resultSelector;
-	self._delegate = delegate;
-	self._token = token;
-	NSMutableURLRequest *request = [[[NSMutableURLRequest alloc] init] autorelease];
-	self._requestingURL = urlString;
+    self.resultSelector = resultSelector;
+	self.delegate = delegate;
+	self.token = token;
+	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+	self.requestingURL = urlString;
 	urlString = [urlString stringByAddingPercentEscapesUsingEncoding: NSUTF8StringEncoding];
 	[request setURL:[NSURL URLWithString: urlString]];
 	[request setCachePolicy:NSURLRequestReloadIgnoringCacheData];
@@ -135,7 +103,7 @@
     
 	if (urlConnection)
 	{
-        self._urlConnection = urlConnection;
+        self.urlConnection = urlConnection;
         
 		_isConnecting = YES;
 		[_receivedData setLength: 0];
@@ -149,8 +117,6 @@
         isSuccess = NO;
     }
     
-    [urlConnection release];
-    
     return isSuccess;
 }
 
@@ -160,11 +126,11 @@
     if(0 == [urlString length] || _isConnecting)
         return NO;
     
-    self._resultSelector = resultSelector;
-	self._delegate = delegate;
-	self._token = token;
-	NSMutableURLRequest *request = [[[NSMutableURLRequest alloc] init] autorelease];
-	self._requestingURL = urlString;
+    self.resultSelector = resultSelector;
+	self.delegate = delegate;
+	self.token = token;
+	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+	self.requestingURL = urlString;
 	urlString = [urlString stringByAddingPercentEscapesUsingEncoding: NSUTF8StringEncoding];
 	[request setURL:[NSURL URLWithString: urlString]];
 	[request setCachePolicy:NSURLRequestReloadIgnoringCacheData];
@@ -186,7 +152,7 @@
     
 	if (urlConnection)
 	{
-        self._urlConnection = urlConnection;
+        self.urlConnection = urlConnection;
         
 		_isConnecting = YES;
 		[_receivedData setLength: 0];
@@ -200,14 +166,12 @@
         isSuccess = NO;
     }
     
-    [urlConnection release];
-    
     return isSuccess;
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
-	self._statusCode = [(NSHTTPURLResponse*)response statusCode];
+	self.statusCode = [(NSHTTPURLResponse*)response statusCode];
 	NSDictionary* header = [(NSHTTPURLResponse*)response allHeaderFields];
 	NSString *content_type = [header valueForKey:@"Content-Type"];
 	_contentType = CT_UNKNOWN;
@@ -242,16 +206,25 @@
         
         if(_resultSelector && [_delegate respondsToSelector:_resultSelector])
         {
-            [_delegate performSelector:_resultSelector withObject:jsonString];
-        }
-        else
-        {
-            SEL selector = @selector(finishedRequest:token:);
-            if(_delegate && [_delegate respondsToSelector:selector])
-                [_delegate finishedRequest:jsonString token:_token];
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+            
+            if(0 == [jsonString length])
+                jsonString = @"";
+            
+            if(self.token)
+            {
+                NSDictionary* dict = @{@"json":jsonString,
+                                       @"token":self.token};
+                [_delegate performSelector:_resultSelector withObject:dict];
+            }
+            else
+            {
+                [_delegate performSelector:_resultSelector withObject:jsonString];
+            }
+#pragma clang diagnostic pop
         }
         
-        [jsonString release];
         
 	}
 	else
@@ -262,13 +235,10 @@
 		
         if(_resultSelector && [_delegate respondsToSelector:_resultSelector])
         {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
             [_delegate performSelector:_resultSelector withObject:nil];
-        }
-        else
-        {
-            SEL selector = @selector(finishedRequest:token:);
-            if(_delegate && [_delegate respondsToSelector:selector])
-                [_delegate finishedRequest:nil token:nil];
+#pragma clang diagnostic pop
         }
 	}
 }
@@ -276,7 +246,7 @@
 - (void)connection:(NSURLConnection *)connection
   didFailWithError:(NSError *)error
 {
-	NSLog(@"didFailWithError");
+	NSLog(@"didFailWithError:%d",_statusCode);
     
 	_isConnecting = NO;
 	[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
@@ -284,13 +254,10 @@
     
     if(_resultSelector && [_delegate respondsToSelector:_resultSelector])
     {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
         [_delegate performSelector:_resultSelector withObject:nil];
-    }
-    else
-    {
-        SEL selector = @selector(finishedRequest:token:);
-        if(_delegate && [_delegate respondsToSelector:selector])
-            [_delegate finishedRequest:nil token:nil];
+#pragma clang diagnostic pop
     }
 }
 

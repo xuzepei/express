@@ -13,6 +13,14 @@
 
 }
 
++ (BOOL)saveImage:(NSData*)data path:(NSString*)path;
++ (NSString*)getImageLocalPath:(NSString *)path;
++ (UIImage*)getImageFromLocal:(NSString*)path;
++ (BOOL)isExistingFile:(NSString*)path;
++ (BOOL)removeFile:(NSString*)filePath;
++ (UIImage *)imageWithImage:(UIImage *)image
+               scaledToSize:(CGSize)newSize;
+
 + (NSString*)getUserDocumentDirectoryPath;
 + (NSString *)md5:(NSString *)str;
 + (CGFloat)systemVersion;
@@ -88,5 +96,10 @@
 + (int)getScreenAdRate;
 + (NSString*)getAppURL;
 + (BOOL)isOpenAll;
++ (NSString*)decrypt:(NSString*)text;
++ (NSString*)getTextById:(NSString*)textId;
++ (NSArray*)getOtherApps;
++ (NSDictionary*)getAlert;
++ (NSString*)getUrlByType:(int)type;
 
 @end

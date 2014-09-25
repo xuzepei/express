@@ -27,7 +27,7 @@
     if (self) {
 		
 		UITabBarItem* item = [[UITabBarItem alloc] initWithTitle:@""
-														   image:[UIImage imageNamed:@"usual.png"]
+														   image:[UIImage imageNamed:@"tab_item_1"]
 															 tag: TT_FIT];
 		self.tabBarItem = item;
 		[item release];
@@ -45,24 +45,26 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-	[super viewWillAppear: animated];
-    
-//    CGFloat adHeight = 0.0;
-//	UIView* adView = [RCTool getAdView];
-//	if(adView)
-//	{
-//        adHeight = adView.bounds.size.height;
-//		CGRect rect = adView.frame;
-//        rect.origin.y = self.view.frame.size.height - adView.frame.size.height;
-//		adView.frame = rect;
-//		
-//		[self.view addSubview:adView];
-//	}
-//    
-//    if(_tableView)
-//    {
-//        _tableView.frame = CGRectMake(0,0,self.view.frame.size.width,self.view.frame.size.height - adHeight);
-//    }
+    [super viewWillAppear: animated];
+
+    UIView* adView = [RCTool getAdView];
+    if(adView)
+    {
+        CGRect rect = adView.frame;
+        
+        if([RCTool systemVersion] >= 7.0)
+        {
+            rect.origin.y = [RCTool getScreenSize].height -TAB_BAR_HEIGHT - adView.frame.size.height;
+            adView.frame = rect;
+        }
+        else
+        {
+            rect.origin.y = [RCTool getScreenSize].height - STATUS_BAR_HEIGHT - NAVIGATION_BAR_HEIGHT - TAB_BAR_HEIGHT - adView.frame.size.height;
+            adView.frame = rect;
+        }
+        
+        [self.view addSubview:adView];
+    }
 }
 
 

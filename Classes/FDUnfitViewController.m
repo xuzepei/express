@@ -27,7 +27,7 @@
     if (self) {
 		
 		UITabBarItem* item = [[UITabBarItem alloc] initWithTitle:@""
-														   image:[UIImage imageNamed:@"list.png"]
+														   image:[UIImage imageNamed:@"tab_item_0"]
 															 tag: TT_UNFIT];
 		self.tabBarItem = item;
 		[item release];
@@ -47,6 +47,26 @@
 	
     if(_infoButton)
         _infoButton.hidden = NO;
+    
+    
+    UIView* adView = [RCTool getAdView];
+    if(adView)
+    {
+        CGRect rect = adView.frame;
+        
+        if([RCTool systemVersion] >= 7.0)
+        {
+            rect.origin.y = [RCTool getScreenSize].height -TAB_BAR_HEIGHT - adView.frame.size.height;
+            adView.frame = rect;
+        }
+        else
+        {
+            rect.origin.y = [RCTool getScreenSize].height - STATUS_BAR_HEIGHT - NAVIGATION_BAR_HEIGHT - TAB_BAR_HEIGHT - adView.frame.size.height;
+            adView.frame = rect;
+        }
+        
+        [self.view addSubview:adView];
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated

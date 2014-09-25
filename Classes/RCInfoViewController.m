@@ -9,6 +9,7 @@
 #import "RCInfoViewController.h"
 #import "RCTool.h"
 #import "RCFAQViewController.h"
+#import "RCImageLoader.h"
 
 #define SECTION_HELP 0
 #define SECTION_OTHERAPP 1
@@ -26,8 +27,39 @@
     self = [super initWithStyle:style];
     if (self) {
         // Custom initialization
+        
+        _itemArray = [[NSMutableArray alloc] init];
     }
     return self;
+}
+
+- (void)dealloc
+{
+    self.itemArray = nil;
+    
+    [super dealloc];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [self requestContent];
+}
+
+- (void)requestContent
+{
+    [_itemArray removeAllObjects];
+    
+    NSArray* otherApps = [RCTool getOtherApps];
+    if(otherApps && [otherApps isKindOfClass:[NSArray class]])
+    {
+        if([otherApps count])
+            [_itemArray addObjectsFromArray:otherApps];
+    }
+    
+    
+    [self.tableView reloadData];
 }
 
 - (void)viewDidLoad
@@ -57,35 +89,66 @@
 
 #pragma mark - Table view data source
 
+- (id)getCellDataAtIndexPath: (NSIndexPath*)indexPath
+{
+    if(1 == indexPath.section)
+    {
+        if(indexPath.row >= [_itemArray count])
+            return nil;
+        
+        return [_itemArray objectAtIndex: indexPath.row];
+    }
+    
+    return nil;
+}
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 1;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 1;
+    if(0 == section)
+        return 1;
+    else
+        return [_itemArray count];
+    
+    return 0;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-//    if(SECTION_HELP == section)
-//        return NSLocalizedString(@"帮助", @"");
-//    else if(SECTION_OTHERAPP == section)
-//        return NSLocalizedString(@"More Emojis", @"");
+    if(0 == section)
+        return NSLocalizedString(@"帮助", @"");
+    else if(1 == section && [_itemArray count])
+        return @"精选应用游戏推荐";
     
     return @"";
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 44.0;
+    if([RCTool isIpad])
+    {
+        if(0 == indexPath.section)
+            return 70.0f;
+        else if(1 == indexPath.section)
+            return 70.0f;
+    }
+    else{
+        if(0 == indexPath.section)
+            return 60.0f;
+        else if(1 == indexPath.section)
+            return 60.0f;
+    }
+    
+    return 0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *cellId0 = @"cellId0";
-    static NSString *cellId1 = @"cellId1";
     static NSString *cellId2 = @"cellId2";
     UITableViewCell *cell = nil;
     
@@ -103,30 +166,39 @@
                 
             }
         }
-        else if(1 == indexPath.row)
-        {
-            cell = [tableView dequeueReusableCellWithIdentifier:cellId1];
-            if (nil == cell) 
-            {
-                cell = [[[UITableViewCell alloc] initWithStyle: UITableViewCellStyleDefault
-                                               reuseIdentifier: cellId1] autorelease];
-                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-                cell.textLabel.text = NSLocalizedString(@"问题与意见反馈", @"");
-            }
-        }
     }
     else if(SECTION_OTHERAPP == indexPath.section)
     {
         cell = [tableView dequeueReusableCellWithIdentifier:cellId2];
         if (nil == cell) 
         {
-            cell = [[[UITableViewCell alloc] initWithStyle: UITableViewCellStyleDefault
+            cell = [[[UITableViewCell alloc] initWithStyle: UITableViewCellStyleSubtitle
                                            reuseIdentifier: cellId2] autorelease];
-            cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        }
+        
+        NSDictionary* item = (NSDictionary*)[self getCellDataAtIndexPath:indexPath];
+        if(item)
+        {
+            cell.textLabel.text = [item objectForKey:@"name"];
             
-            cell.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"more_emojis_button.png"]];
-            
+            NSString* imageUrl = [item objectForKey:@"img_url"];
+            if([imageUrl length])
+            {
+                UIImage* image = [RCTool getImageFromLocal:imageUrl];
+                if(image)
+                {
+                    image = [RCTool imageWithImage:image scaledToSize:CGSizeMake(40.0, 40.0)];
+                    cell.imageView.image = image;
+                }
+                else
+                {
+                    [[RCImageLoader sharedInstance] saveImage:imageUrl
+                                                     delegate:self
+                                                        token:nil];
+                }
+            }
         }
     }
     
@@ -194,7 +266,13 @@
     }
     else if(SECTION_OTHERAPP == indexPath.section)
     {
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:APPSTORE_URL]];
+        NSDictionary* item = (NSDictionary*)[self getCellDataAtIndexPath:indexPath];
+        if(item)
+        {
+            NSString* urlString = [item objectForKey:@"url"];
+            if([urlString length])
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlString]];
+        }
     }
 }
 
@@ -226,7 +304,7 @@
         
         [compose setMessageBody:@"请在来信中明确问题的情况，包括：\r\r1.如果未能成功查询，请写明快递公司和快递单号； \r\r2.如果无法找到对应的快递公司，请写明快递公司名称，我们会在新版本中尽力为您添加；" isHTML:NO];
         
-        [self presentModalViewController:compose animated:YES];
+        [self presentViewController:compose animated:YES completion:nil];
         
         [compose release];
     }
@@ -243,7 +321,12 @@
         [RCTool showAlert:@"提示" message:@"邮件已成功发送!"];
     }
     
-	[controller dismissModalViewControllerAnimated:YES];
+	[controller dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)succeedLoad:(id)result token:(id)token
+{
+    [self.tableView reloadData];
 }
 
 @end

@@ -11,4 +11,6 @@
 
 @interface RCInfoViewController : UITableViewController<MFMailComposeViewControllerDelegate>
 
+@property(nonatomic,strong)NSMutableArray* itemArray;
+
 @end

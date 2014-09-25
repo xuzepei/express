@@ -10,8 +10,9 @@
 #import "Food.h"
 #import "FDResultViewController.h"
 #import "RCTool.h"
-#import "RCInquiryHttpRequest.h"
+#import "RCHttpRequest.h"
 #import "RCRecentCell.h"
+
 
 #define OPERATE_TAG 100
 
@@ -30,7 +31,7 @@
 		
 		
 		UITabBarItem* item = [[UITabBarItem alloc] initWithTitle:@""
-														   image:[UIImage imageNamed:@"history.png"]
+														   image:[UIImage imageNamed:@"tab_item_3"]
 															 tag: TT_FAVORITE];
 		self.tabBarItem = item;
 		[item release];
@@ -61,6 +62,30 @@
     [self initAddNoteView];
     
     [self updateContent:nil];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear: animated];
+    
+    UIView* adView = [RCTool getAdView];
+    if(adView)
+    {
+        CGRect rect = adView.frame;
+        
+        if([RCTool systemVersion] >= 7.0)
+        {
+            rect.origin.y = [RCTool getScreenSize].height -TAB_BAR_HEIGHT - adView.frame.size.height;
+            adView.frame = rect;
+        }
+        else
+        {
+            rect.origin.y = [RCTool getScreenSize].height - STATUS_BAR_HEIGHT - NAVIGATION_BAR_HEIGHT - TAB_BAR_HEIGHT - adView.frame.size.height;
+            adView.frame = rect;
+        }
+        
+        [self.view addSubview:adView];
+    }
 }
 
 
@@ -435,20 +460,31 @@
             valicode = @"13982260600";
         }
         
-		NSString* urlString = @"http://api.kuaidi100.com/api";
-        NSMutableDictionary* token = [[NSMutableDictionary alloc] init];
+		NSString* urlString = [RCTool getUrlByType:0];
+        NSMutableString* token = [[NSMutableString alloc] init];
         if([code length])
-            [token setObject:code forKey:@"com"];
+            [token appendFormat:@"com=%@",code];
         if([number length])
-            [token setObject:number forKey:@"nu"];
+            [token appendFormat:@"&nu=%@",number];
         if([key length])
-            [token setObject:key forKey:@"id"];
+            [token appendFormat:@"&id=%@",key];
         if([valicode length])
-            [token setObject:valicode forKey:@"valicode"];
+            [token appendFormat:@"&valicode=%@",valicode];
         
-		RCInquiryHttpRequest* temp = [RCInquiryHttpRequest sharedInstance];
-		[temp request:urlString delegate:self token:token];
-        [token release];
+        [token appendString:@"&muti=1&order=desc&show=0"];
+        
+//		RCInquiryHttpRequest* temp = [RCInquiryHttpRequest sharedInstance];
+//		[temp request:urlString delegate:self token:token];
+//        [token release];
+        
+        RCHttpRequest* temp = [RCHttpRequest sharedInstance];
+        BOOL b = [temp post:urlString delegate:self resultSelector:@selector(finishedRequest:) token:token];
+        if(b)
+        {
+            UIWindow* frontWindow = [RCTool frontWindow];
+            [frontWindow addSubview: _indicator];
+            [_indicator show:YES];
+        }
 		
 	}
 	else
@@ -462,6 +498,107 @@
 		[alert release];
 	}
 }
+
+- (void)finishedRequest:(NSDictionary*)result
+{
+    [_indicator hide:YES];
+    
+    if(nil == result)
+    {
+        [RCTool showAlert:@"对不起" message:@"查询失败，请检查网络，稍候尝试。"];
+        return;
+    }
+    
+    NSString* json = [result objectForKey:@"json"];
+    if(0 == [json length])
+    {
+        [RCTool showAlert:@"对不起" message:@"查询失败，请检查网络，稍候尝试。"];
+        return;
+    }
+    
+    NSDictionary* dict = [RCTool parseToDictionary:json];
+    if(nil == dict)
+    {
+        [RCTool showAlert:@"对不起" message:@"查询失败，请检查网络，稍候尝试。"];
+        return;
+    }
+    
+    //status： 结果状态（返回0、1和408。0，表示无查询结果；1，表示查询成功 ）
+    
+    //state:快递单当前的状态 。0：在途中,1：已发货，2：疑难件，3： 已签收 ，4：已退货。
+    
+    NSString* status = [dict objectForKey:@"status"];
+    if(NO == [status isEqualToString:@"1"])
+    {
+        NSString* message = [dict objectForKey:@"message"];
+        if(0 == [message length])
+            message = @"无查询结果,请确认快递单号填写正确。";
+        
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"对不起"
+                                                        message:message
+                                                       delegate:nil
+                                              cancelButtonTitle:@"确定"
+                                              otherButtonTitles:nil];
+        [alert show];
+        [alert release];
+        return;
+    }
+    
+    
+    NSString* num = self.selectedRecord.num;
+    NSString* code = self.selectedRecord.code;
+    NSString* name = self.selectedRecord.name;
+    
+    NSString* time = [NSString stringWithFormat:@"%lf",[[NSDate date] timeIntervalSince1970]];
+    NSRange range = [time rangeOfString:@"."];
+    if(NSNotFound == range.location)
+        time = [time substringToIndex:range.location];
+    
+    NSManagedObjectContext* insertionContext = [RCTool getManagedObjectContext];
+    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"code = %@ && num = %@",code,num];
+    NSManagedObjectID* objectID = [RCTool getExistingEntityObjectIDForName: @"Record"
+                                                                 predicate: predicate
+                                                           sortDescriptors: nil
+                                                                   context: insertionContext];
+    
+    
+    Record* record = nil;
+    if(nil == objectID)
+    {
+        record = [RCTool insertEntityObjectForName:@"Record"
+                              managedObjectContext:insertionContext];
+    }
+    else
+    {
+        record = (Record*)[RCTool insertEntityObjectForID:objectID
+                                     managedObjectContext:insertionContext];
+    }
+    
+    record.name = name;
+    record.code = code;
+    record.num = num;
+    record.time = time;
+    record.isHidden = [NSNumber numberWithBool:NO];
+    
+    [RCTool saveCoreData];
+    
+    [RCTool saveResult:dict time:time];
+    
+    if(_tableView)
+        [_tableView reloadData];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"updateContent"
+                                                        object:nil];
+    
+    FDResultViewController* temp = [[FDResultViewController alloc] initWithNibName:@"FDResultViewController"
+                                                                            bundle:nil];
+    [temp updateContent: record];
+    temp.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:temp animated:YES];
+    [temp release];
+    
+}
+
 
 - (void)addNote
 {
@@ -528,7 +665,7 @@
         
         [compose setMessageBody:[NSString stringWithFormat:@"快递最新状态: %@ 时间: %@",context,time] isHTML:NO];
         
-        [self presentModalViewController:compose animated:YES];
+        [self presentViewController:compose animated:YES completion:nil];
         
         [compose release];
     }
@@ -545,7 +682,7 @@
         [RCTool showAlert:@"提示" message:@"邮件已成功发送!"];
     }
     
-	[controller dismissModalViewControllerAnimated:YES];
+	[controller dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)sendRecordBySMS
@@ -590,14 +727,14 @@
     NSString* title = [NSString stringWithFormat:@"%@ 单号:%@",self.selectedRecord.name,self.selectedRecord.num];
     compose.body = [NSString stringWithFormat:@"%@,最新状态: %@ 时间: %@",title,context,time];
     
-    [self presentModalViewController:compose animated:YES];
+    [self presentViewController:compose animated:YES completion:nil];
     //[[[[compose viewControllers] lastObject] navigationItem] setTitle:@"SomethingElse"];//修改短信界面标题
     [compose release];
 }
 
 - (void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result
 {
-    [controller dismissModalViewControllerAnimated:NO];//关键的一句   不能为YES
+    [controller dismissViewControllerAnimated:NO completion:nil];//关键的一句   不能为YES
     switch ( result ) {
         case MessageComposeResultCancelled:
             break;
