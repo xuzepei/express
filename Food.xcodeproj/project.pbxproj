@@ -119,8 +119,6 @@
 		0958F978165F7B8800332466 /* done.caf in Resources */ = {isa = PBXBuildFile; fileRef = 0958F977165F7B8800332466 /* done.caf */; };
 		0960CE401432AE0700BEBE58 /* Food.m in Sources */ = {isa = PBXBuildFile; fileRef = 0960CE3F1432AE0700BEBE58 /* Food.m */; };
 		0976D23517F942BF00A58584 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0976D23417F942BF00A58584 /* Images.xcassets */; };
-		09A49A371957F6C7006840C6 /* libAdapterIAd.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 09A49A331957F6C7006840C6 /* libAdapterIAd.a */; };
-		09A49A381957F6C7006840C6 /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = 09A49A341957F6C7006840C6 /* README.txt */; };
 		09A49A3C1957FA1F006840C6 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09A49A3B1957FA1F006840C6 /* CoreTelephony.framework */; };
 		09A49A3E1957FA46006840C6 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 09A49A3D1957FA46006840C6 /* libz.dylib */; };
 		09A49A4019580EE2006840C6 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09A49A3F19580EE2006840C6 /* MobileCoreServices.framework */; };
@@ -404,8 +402,6 @@
 		0960CE3E1432AE0700BEBE58 /* Food.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Food.h; sourceTree = "<group>"; };
 		0960CE3F1432AE0700BEBE58 /* Food.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Food.m; sourceTree = "<group>"; };
 		0976D23417F942BF00A58584 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Food/Images.xcassets; sourceTree = "<group>"; };
-		09A49A331957F6C7006840C6 /* libAdapterIAd.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libAdapterIAd.a; sourceTree = "<group>"; };
-		09A49A341957F6C7006840C6 /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
 		09A49A3B1957FA1F006840C6 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		09A49A3D1957FA46006840C6 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		09A49A3F19580EE2006840C6 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
@@ -581,7 +577,6 @@
 				2892E4100DC94CBA00A64D0F /* CoreGraphics.framework in Frameworks */,
 				09DBAF821959B78C00D53FBA /* libMobClickLibrary.a in Frameworks */,
 				28860BE50F44EE6400985440 /* CoreData.framework in Frameworks */,
-				09A49A371957F6C7006840C6 /* libAdapterIAd.a in Frameworks */,
 				0935F0721431BA68003FC618 /* SystemConfiguration.framework in Frameworks */,
 				0935F08F1431BD50003FC618 /* libsqlite3.0.dylib in Frameworks */,
 				0939053814401E1C00DA3B84 /* MediaPlayer.framework in Frameworks */,
@@ -774,18 +769,8 @@
 				091693A319D3B01F0004146B /* GADRequestError.h */,
 				091693A419D3B01F0004146B /* libGoogleAdMobAds.a */,
 				091693A519D3B01F0004146B /* README.txt */,
-				09A49A321957F6C7006840C6 /* LibAdapterIAd-Nov52013 */,
 			);
 			path = AdMob;
-			sourceTree = "<group>";
-		};
-		09A49A321957F6C7006840C6 /* LibAdapterIAd-Nov52013 */ = {
-			isa = PBXGroup;
-			children = (
-				09A49A331957F6C7006840C6 /* libAdapterIAd.a */,
-				09A49A341957F6C7006840C6 /* README.txt */,
-			);
-			path = "LibAdapterIAd-Nov52013";
 			sourceTree = "<group>";
 		};
 		09DBAF7F1959B78C00D53FBA /* UMeng */ = {
@@ -1236,7 +1221,6 @@
 				09FA07DD165BC82A0008E846 /* quanchenkuaidi@2x.png in Resources */,
 				09FA07E1165BC82A0008E846 /* quanjitong@2x.png in Resources */,
 				09FA07E3165BC82A0008E846 /* quanritongkuaidi@2x.png in Resources */,
-				09A49A381957F6C7006840C6 /* README.txt in Resources */,
 				09FA07E5165BC82A0008E846 /* quanyikuaidi@2x.png in Resources */,
 				09FA07E7165BC82A0008E846 /* rufengda@2x.png in Resources */,
 				09FA07E9165BC82A0008E846 /* saiaodi@2x.png in Resources */,
@@ -1424,8 +1408,8 @@
 				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: GAO HUIJUAN (2699D9JM3T)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: GAO HUIJUAN (2699D9JM3T)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: GAO HUIJUAN";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: GAO HUIJUAN";
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Food_Prefix.pch;
@@ -1442,12 +1426,12 @@
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = Food;
-				PROVISIONING_PROFILE = "3C489EAF-5695-4CAA-AC85-439F4FC4DCDB";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "3C489EAF-5695-4CAA-AC85-439F4FC4DCDB";
+				PROVISIONING_PROFILE = "d43429c3-8ad3-4e88-bca9-1db982314af4";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "d43429c3-8ad3-4e88-bca9-1db982314af4";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
-				VALID_ARCHS = "armv7 armv7s";
+				VALID_ARCHS = "armv7 armv7s arm64";
 			};
 			name = Distribution;
 		};
@@ -1458,8 +1442,8 @@
 				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iOS Development: GAO HUIJUAN (H6MYDBBM56)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iOS Development: GAO HUIJUAN (H6MYDBBM56)";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -1478,11 +1462,11 @@
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = Food;
-				PROVISIONING_PROFILE = "FF9F30F5-2F4E-4DE0-B20B-50B6903CD829";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "FF9F30F5-2F4E-4DE0-B20B-50B6903CD829";
+				PROVISIONING_PROFILE = "75927f88-5694-4c67-beec-d80bae99adca";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "75927f88-5694-4c67-beec-d80bae99adca";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALID_ARCHS = "armv7 armv7s";
+				VALID_ARCHS = "armv7 armv7s arm64";
 			};
 			name = Debug;
 		};
@@ -1493,8 +1477,8 @@
 				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: GAO HUIJUAN (2699D9JM3T)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: GAO HUIJUAN (2699D9JM3T)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: GAO HUIJUAN";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: GAO HUIJUAN";
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Food_Prefix.pch;
@@ -1511,12 +1495,12 @@
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = Food;
-				PROVISIONING_PROFILE = "3C489EAF-5695-4CAA-AC85-439F4FC4DCDB";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "3C489EAF-5695-4CAA-AC85-439F4FC4DCDB";
+				PROVISIONING_PROFILE = "d43429c3-8ad3-4e88-bca9-1db982314af4";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "d43429c3-8ad3-4e88-bca9-1db982314af4";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
-				VALID_ARCHS = "armv7 armv7s";
+				VALID_ARCHS = "armv7 armv7s arm64";
 			};
 			name = Release;
 		};

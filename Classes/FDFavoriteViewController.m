@@ -68,6 +68,9 @@
 {
     [super viewWillAppear: animated];
     
+    if([RCTool showLessAds])
+        return;
+    
     UIView* adView = [RCTool getAdView];
     if(adView)
     {
@@ -210,7 +213,7 @@
     if(nil == record)
         return 80.0;
     
-    CGFloat max_width = [RCTool getScreenSize].width - 30.0;
+    CGFloat max_width = [RCTool getScreenSize].width - 33.0;
     CGFloat fontSize = 14.0;
     if([RCTool isIpad])
     {
@@ -276,7 +279,7 @@
     if([name length])
     {
         NSString* temp = [NSString stringWithFormat:@"快递: %@",name];
-        CGSize size = [temp sizeWithFont:[UIFont systemFontOfSize:fontSize] constrainedToSize:CGSizeMake(max_width, CGFLOAT_MAX)];
+        CGSize size = [temp sizeWithFont:[UIFont systemFontOfSize:fontSize+2] constrainedToSize:CGSizeMake(max_width, CGFLOAT_MAX)];
         height += size.height;
     }
     
@@ -288,7 +291,7 @@
     if([dateString length])
     {
         NSString* temp = [NSString stringWithFormat:@"时间: %@",dateString];
-        CGSize size = [temp sizeWithFont:[UIFont systemFontOfSize:fontSize] constrainedToSize:CGSizeMake(max_width, CGFLOAT_MAX)];
+        CGSize size = [temp sizeWithFont:[UIFont systemFontOfSize:fontSize+2] constrainedToSize:CGSizeMake(max_width, CGFLOAT_MAX)];
         height += size.height;
     }
     

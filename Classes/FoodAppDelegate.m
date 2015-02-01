@@ -167,7 +167,7 @@
      Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
      */
     
-    self.showFullScreenAd = YES;
+    self.showFullScreenAd = [RCTool showAdWhenLaunch];
     [self getAppInfo];
 }
 
@@ -503,11 +503,12 @@ didFailToReceiveAdWithError:(GADRequestError *)error
 - (void)interstitialDidDismissScreen:(GADInterstitial *)ad
 {
     self.adInterstitial = nil;
-    [self getAdInterstitial];
+    //[self getAdInterstitial];
 }
 
 - (void)showInterstitialAd:(id)argument
 {
+    static int showTimes = 0;
     if(self.adInterstitial)
     {
         [self.adInterstitial presentFromRootViewController:_tabBarController.selectedViewController];
@@ -515,6 +516,16 @@ didFailToReceiveAdWithError:(GADRequestError *)error
     else if(self.interstitial && self.interstitial.loaded)
     {
         [self.interstitial presentFromViewController:_tabBarController.selectedViewController];
+    }
+    else
+    {
+        showTimes++;
+        
+        if(showTimes == [RCTool getScreenAdRate] - 1)
+        {
+            showTimes = 0;
+            [self getAdInterstitial];
+        }
     }
 }
 

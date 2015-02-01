@@ -101,5 +101,7 @@
 + (NSArray*)getOtherApps;
 + (NSDictionary*)getAlert;
 + (NSString*)getUrlByType:(int)type;
++ (BOOL)showLessAds;
++ (BOOL)showAdWhenLaunch;
 
 @end

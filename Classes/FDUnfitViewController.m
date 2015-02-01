@@ -48,6 +48,8 @@
     if(_infoButton)
         _infoButton.hidden = NO;
     
+    if([RCTool showLessAds])
+        return;
     
     UIView* adView = [RCTool getAdView];
     if(adView)
@@ -156,6 +158,7 @@
 	}
 	_tableView.delegate = self;
 	_tableView.dataSource = self;
+    _tableView.sectionIndexBackgroundColor = [UIColor clearColor];
 	
 	[self.view addSubview:_tableView];
     

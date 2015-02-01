@@ -47,6 +47,9 @@
 {
     [super viewWillAppear: animated];
 
+    if([RCTool showLessAds])
+        return;
+    
     UIView* adView = [RCTool getAdView];
     if(adView)
     {
@@ -65,6 +68,7 @@
         
         [self.view addSubview:adView];
     }
+    
 }
 
 
@@ -139,6 +143,7 @@
     
 	_tableView.delegate = self;
 	_tableView.dataSource = self;
+    _tableView.sectionIndexBackgroundColor = [UIColor clearColor];
 	
 	[self.view addSubview:_tableView];
 	

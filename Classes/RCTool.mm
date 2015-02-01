@@ -25,9 +25,9 @@ static SystemSoundID g_soundID = 0;
 
 void systemSoundCompletionProc(SystemSoundID ssID,void *clientData)
 {
-	AudioServicesRemoveSystemSoundCompletion(ssID);
-	AudioServicesDisposeSystemSoundID(g_soundID);
-	g_soundID = 0;
+    AudioServicesRemoveSystemSoundCompletion(ssID);
+    AudioServicesDisposeSystemSoundID(g_soundID);
+    g_soundID = 0;
 }
 
 
@@ -168,25 +168,25 @@ void systemSoundCompletionProc(SystemSoundID ssID,void *clientData)
 {
     //return NSTemporaryDirectory();
     
-	NSArray* array = NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES );
-	if([array count])
-		return [array objectAtIndex: 0];
-	else
-		return @"";
+    NSArray* array = NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES );
+    if([array count])
+        return [array objectAtIndex: 0];
+    else
+        return @"";
 }
 
-+ (NSString *)md5:(NSString *)str 
++ (NSString *)md5:(NSString *)str
 {
-	const char *cStr = [str UTF8String];
-	unsigned char result[16];
-	CC_MD5( cStr, strlen(cStr), result );
-	return [NSString stringWithFormat:
-			@"%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X",
-			result[0], result[1], result[2], result[3], 
-			result[4], result[5], result[6], result[7],
-			result[8], result[9], result[10], result[11],
-			result[12], result[13], result[14], result[15]
-			];	
+    const char *cStr = [str UTF8String];
+    unsigned char result[16];
+    CC_MD5( cStr, strlen(cStr), result );
+    return [NSString stringWithFormat:
+            @"%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X",
+            result[0], result[1], result[2], result[3],
+            result[4], result[5], result[6], result[7],
+            result[8], result[9], result[10], result[11],
+            result[12], result[13], result[14], result[15]
+            ];
 }
 
 + (NSDictionary*)parseToDictionary:(NSString*)jsonString
@@ -220,20 +220,20 @@ void systemSoundCompletionProc(SystemSoundID ssID,void *clientData)
 
 + (void)setReachabilityType:(int)type
 {
-	g_reachabilityType = type;
+    g_reachabilityType = type;
 }
 
 + (int)getReachabilityType
 {
-	return g_reachabilityType;
+    return g_reachabilityType;
 }
 
 + (BOOL)isReachableViaInternet
 {
-	Reachability* internetReach = [Reachability reachabilityForInternetConnection];
-	[internetReach startNotifier];
-	NetworkStatus netStatus = [internetReach currentReachabilityStatus];
-	switch (netStatus)
+    Reachability* internetReach = [Reachability reachabilityForInternetConnection];
+    [internetReach startNotifier];
+    NetworkStatus netStatus = [internetReach currentReachabilityStatus];
+    switch (netStatus)
     {
         case NotReachable:
         {
@@ -245,21 +245,21 @@ void systemSoundCompletionProc(SystemSoundID ssID,void *clientData)
         }
         case ReachableViaWiFi:
         {
-			return YES;
-		}
-		default:
-			return NO;
-	}
-	
-	return NO;
+            return YES;
+        }
+        default:
+            return NO;
+    }
+    
+    return NO;
 }
 
 + (BOOL)isReachableViaWiFi
 {
-	Reachability* internetReach = [Reachability reachabilityForInternetConnection];
-	[internetReach startNotifier];
-	NetworkStatus netStatus = [internetReach currentReachabilityStatus];
-	switch (netStatus)
+    Reachability* internetReach = [Reachability reachabilityForInternetConnection];
+    [internetReach startNotifier];
+    NetworkStatus netStatus = [internetReach currentReachabilityStatus];
+    switch (netStatus)
     {
         case NotReachable:
         {
@@ -271,156 +271,156 @@ void systemSoundCompletionProc(SystemSoundID ssID,void *clientData)
         }
         case ReachableViaWiFi:
         {
-			return YES;
-		}
-		default:
-			return NO;
-	}
-	
-	return NO;
+            return YES;
+        }
+        default:
+            return NO;
+    }
+    
+    return NO;
 }
 
 + (NSPersistentStoreCoordinator*)getPersistentStoreCoordinator
 {
-	FoodAppDelegate* appDelegate = (FoodAppDelegate*)[[UIApplication sharedApplication] delegate];
-	return [appDelegate persistentStoreCoordinator];
+    FoodAppDelegate* appDelegate = (FoodAppDelegate*)[[UIApplication sharedApplication] delegate];
+    return [appDelegate persistentStoreCoordinator];
 }
 
 + (NSManagedObjectContext*)getManagedObjectContext
 {
-	FoodAppDelegate* appDelegate = (FoodAppDelegate*)[[UIApplication sharedApplication] delegate];
-	return [appDelegate managedObjectContext];
+    FoodAppDelegate* appDelegate = (FoodAppDelegate*)[[UIApplication sharedApplication] delegate];
+    return [appDelegate managedObjectContext];
 }
 
 + (NSManagedObjectID*)getExistingEntityObjectIDForName:(NSString*)entityName
-											 predicate:(NSPredicate*)predicate
-									   sortDescriptors:(NSArray*)sortDescriptors
-											   context:(NSManagedObjectContext*)context
+                                             predicate:(NSPredicate*)predicate
+                                       sortDescriptors:(NSArray*)sortDescriptors
+                                               context:(NSManagedObjectContext*)context
 
 {
-	if(0 == [entityName length] || nil == context)
-		return nil;
-	
-	//NSManagedObjectContext* context = [RCTool getManagedObjectContext];
-	NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-	NSEntityDescription *entity = [NSEntityDescription entityForName:entityName
-											  inManagedObjectContext:context];
-	[fetchRequest setEntity:entity];
-	
-	
-	//sortDescriptors 是必传属性
-	NSArray *temp = [NSArray arrayWithArray: sortDescriptors];
-	[fetchRequest setSortDescriptors:temp];
-	
-	
-	//set predicate
-	[fetchRequest setPredicate:predicate];
-	
-	//设置返回类型
-	[fetchRequest setResultType:NSManagedObjectIDResultType];
-	
-	
-	//	NSFetchedResultsController *fetchedResultsController = [[NSFetchedResultsController alloc] 
-	//															initWithFetchRequest:fetchRequest 
-	//															managedObjectContext:context 
-	//															sectionNameKeyPath:nil 
-	//															cacheName:@"Root"];
-	//	
-	//	//[context tryLock];
-	//	[fetchedResultsController performFetch:nil];
-	//	//[context unlock];
-	
-	NSArray* objectIDs = [context executeFetchRequest:fetchRequest error:nil];
-	
-	[fetchRequest release];
-	
-	if(objectIDs && [objectIDs count])
-		return [objectIDs lastObject];
-	else
-		return nil;
+    if(0 == [entityName length] || nil == context)
+        return nil;
+    
+    //NSManagedObjectContext* context = [RCTool getManagedObjectContext];
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:entityName
+                                              inManagedObjectContext:context];
+    [fetchRequest setEntity:entity];
+    
+    
+    //sortDescriptors 是必传属性
+    NSArray *temp = [NSArray arrayWithArray: sortDescriptors];
+    [fetchRequest setSortDescriptors:temp];
+    
+    
+    //set predicate
+    [fetchRequest setPredicate:predicate];
+    
+    //设置返回类型
+    [fetchRequest setResultType:NSManagedObjectIDResultType];
+    
+    
+    //	NSFetchedResultsController *fetchedResultsController = [[NSFetchedResultsController alloc]
+    //															initWithFetchRequest:fetchRequest
+    //															managedObjectContext:context
+    //															sectionNameKeyPath:nil
+    //															cacheName:@"Root"];
+    //
+    //	//[context tryLock];
+    //	[fetchedResultsController performFetch:nil];
+    //	//[context unlock];
+    
+    NSArray* objectIDs = [context executeFetchRequest:fetchRequest error:nil];
+    
+    [fetchRequest release];
+    
+    if(objectIDs && [objectIDs count])
+        return [objectIDs lastObject];
+    else
+        return nil;
 }
 
 + (NSArray*)getExistingEntityObjectsForName:(NSString*)entityName
-								  predicate:(NSPredicate*)predicate
-							sortDescriptors:(NSArray*)sortDescriptors
+                                  predicate:(NSPredicate*)predicate
+                            sortDescriptors:(NSArray*)sortDescriptors
 {
-	if(0 == [entityName length])
-		return nil;
-	
-	NSManagedObjectContext* context = [RCTool getManagedObjectContext];
-	NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-	NSEntityDescription *entity = [NSEntityDescription entityForName:entityName
-											  inManagedObjectContext:context];
-	[fetchRequest setEntity:entity];
-	
-	
-	//sortDescriptors 是必传属性
-	if(nil == sortDescriptors)
-	{
-		NSArray *temp = [NSArray arrayWithArray: sortDescriptors];
-		[fetchRequest setSortDescriptors:temp];
-	}
-	else
-		[fetchRequest setSortDescriptors:sortDescriptors];
-
-	
-	
-	//set predicate
-	[fetchRequest setPredicate:predicate];
-	
-	//设置返回类型
-	[fetchRequest setResultType:NSManagedObjectResultType];
-	
-	NSArray* objects = [context executeFetchRequest:fetchRequest error:nil];
-	
-	[fetchRequest release];
-	
-	return objects;
+    if(0 == [entityName length])
+        return nil;
+    
+    NSManagedObjectContext* context = [RCTool getManagedObjectContext];
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:entityName
+                                              inManagedObjectContext:context];
+    [fetchRequest setEntity:entity];
+    
+    
+    //sortDescriptors 是必传属性
+    if(nil == sortDescriptors)
+    {
+        NSArray *temp = [NSArray arrayWithArray: sortDescriptors];
+        [fetchRequest setSortDescriptors:temp];
+    }
+    else
+        [fetchRequest setSortDescriptors:sortDescriptors];
+    
+    
+    
+    //set predicate
+    [fetchRequest setPredicate:predicate];
+    
+    //设置返回类型
+    [fetchRequest setResultType:NSManagedObjectResultType];
+    
+    NSArray* objects = [context executeFetchRequest:fetchRequest error:nil];
+    
+    [fetchRequest release];
+    
+    return objects;
 }
 
-+ (id)insertEntityObjectForName:(NSString*)entityName 
-		   managedObjectContext:(NSManagedObjectContext*)managedObjectContext;
++ (id)insertEntityObjectForName:(NSString*)entityName
+           managedObjectContext:(NSManagedObjectContext*)managedObjectContext;
 {
-	if(0 == [entityName length] || nil == managedObjectContext)
-		return nil;
-	
-	NSManagedObjectContext* context = managedObjectContext;
-	id entityObject = [NSEntityDescription insertNewObjectForEntityForName:entityName 
-													inManagedObjectContext:context];
-	
-	
-	return entityObject;
-	
+    if(0 == [entityName length] || nil == managedObjectContext)
+        return nil;
+    
+    NSManagedObjectContext* context = managedObjectContext;
+    id entityObject = [NSEntityDescription insertNewObjectForEntityForName:entityName
+                                                    inManagedObjectContext:context];
+    
+    
+    return entityObject;
+    
 }
 
-+ (id)insertEntityObjectForID:(NSManagedObjectID*)objectID 
-		 managedObjectContext:(NSManagedObjectContext*)managedObjectContext;
++ (id)insertEntityObjectForID:(NSManagedObjectID*)objectID
+         managedObjectContext:(NSManagedObjectContext*)managedObjectContext;
 {
-	if(nil == objectID || nil == managedObjectContext)
-		return nil;
-	
-	return [managedObjectContext objectWithID:objectID];
+    if(nil == objectID || nil == managedObjectContext)
+        return nil;
+    
+    return [managedObjectContext objectWithID:objectID];
 }
 
 + (void)saveCoreData
 {
-	FoodAppDelegate* appDelegate = (FoodAppDelegate*)[[UIApplication sharedApplication] delegate];
-	NSError *error = nil;
-    if ([appDelegate managedObjectContext] != nil) 
-	{
-        if ([[appDelegate managedObjectContext] hasChanges] && ![[appDelegate managedObjectContext] save:&error]) 
-		{
-
-        } 
+    FoodAppDelegate* appDelegate = (FoodAppDelegate*)[[UIApplication sharedApplication] delegate];
+    NSError *error = nil;
+    if ([appDelegate managedObjectContext] != nil)
+    {
+        if ([[appDelegate managedObjectContext] hasChanges] && ![[appDelegate managedObjectContext] save:&error])
+        {
+            
+        }
     }
 }
 
 + (void)importLocalData
 {
-	NSArray* oldExpressArray = [RCTool getExistingEntityObjectsForName:@"Express"
-													   predicate:nil
-												 sortDescriptors:nil];
-	for(NSManagedObject* object in oldExpressArray)
+    NSArray* oldExpressArray = [RCTool getExistingEntityObjectsForName:@"Express"
+                                                             predicate:nil
+                                                       sortDescriptors:nil];
+    for(NSManagedObject* object in oldExpressArray)
     {
         [[RCTool getManagedObjectContext] deleteObject: object];
     }
@@ -429,84 +429,84 @@ void systemSoundCompletionProc(SystemSoundID ssID,void *clientData)
     
     NSString* path = [[NSBundle mainBundle] pathForResource:@"express" ofType:@"plist"];
     NSArray* expressArray = [[NSArray alloc] initWithContentsOfFile:path];
-	
-	if([expressArray count])
-	{
-//        NSString* path = [NSString stringWithFormat:@"%@/express.plist",[RCTool getUserDocumentDirectoryPath]];
-//        [array writeToFile:path atomically:YES];
+    
+    if([expressArray count])
+    {
+        //        NSString* path = [NSString stringWithFormat:@"%@/express.plist",[RCTool getUserDocumentDirectoryPath]];
+        //        [array writeToFile:path atomically:YES];
         
-// NSDictionary 转 json
-//        NSError *error;
-//        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:array
-//                                                           options:NSJSONWritingPrettyPrinted // Pass 0 if you don't care about the readability of the generated string
-//                                                             error:&error];
-//        
-//        if (! jsonData) {
-//            NSLog(@"Got an error: %@", error);
-//        } else {
-//            NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-//            NSLog(@"jsonString:%@",jsonString);
-//        }
+        // NSDictionary 转 json
+        //        NSError *error;
+        //        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:array
+        //                                                           options:NSJSONWritingPrettyPrinted // Pass 0 if you don't care about the readability of the generated string
+        //                                                             error:&error];
+        //
+        //        if (! jsonData) {
+        //            NSLog(@"Got an error: %@", error);
+        //        } else {
+        //            NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+        //            NSLog(@"jsonString:%@",jsonString);
+        //        }
         
         
-		for(NSDictionary* temp in expressArray)
-		{
-			NSString* idString = [temp objectForKey:@"id"];
-			NSManagedObjectContext* insertionContext = [RCTool getManagedObjectContext];
-			NSPredicate* predicate = [NSPredicate predicateWithFormat:@"id = %@",idString];
-			NSManagedObjectID* objectID = [RCTool getExistingEntityObjectIDForName: @"Express"
-																		 predicate: predicate
-																   sortDescriptors: nil
-																		   context: insertionContext];
-			
-			
-			Express* express = nil;
-			if(nil == objectID)
-			{
-				express = [RCTool insertEntityObjectForName:@"Express" 
-									managedObjectContext:insertionContext];
-			}
-			else
-			{
-				express = (Express*)[RCTool insertEntityObjectForID:objectID
-										 managedObjectContext:insertionContext];
-			}
-			
-			express.id = idString;
-			express.name = [temp objectForKey:@"name"];
-			express.phoneNum = [temp objectForKey:@"phoneNum"];
-			express.web = [temp objectForKey:@"web"];
-			express.code = [temp objectForKey:@"code"];
-			express.type = [temp objectForKey:@"type"];
-			express.isHidden = [NSNumber numberWithBool: NO];
-			express.isUsually = [temp objectForKey:@"isUsually"];
-
-		}
-		
-		[RCTool saveCoreData];
-	}
+        for(NSDictionary* temp in expressArray)
+        {
+            NSString* idString = [temp objectForKey:@"id"];
+            NSManagedObjectContext* insertionContext = [RCTool getManagedObjectContext];
+            NSPredicate* predicate = [NSPredicate predicateWithFormat:@"id = %@",idString];
+            NSManagedObjectID* objectID = [RCTool getExistingEntityObjectIDForName: @"Express"
+                                                                         predicate: predicate
+                                                                   sortDescriptors: nil
+                                                                           context: insertionContext];
+            
+            
+            Express* express = nil;
+            if(nil == objectID)
+            {
+                express = [RCTool insertEntityObjectForName:@"Express"
+                                       managedObjectContext:insertionContext];
+            }
+            else
+            {
+                express = (Express*)[RCTool insertEntityObjectForID:objectID
+                                               managedObjectContext:insertionContext];
+            }
+            
+            express.id = idString;
+            express.name = [temp objectForKey:@"name"];
+            express.phoneNum = [temp objectForKey:@"phoneNum"];
+            express.web = [temp objectForKey:@"web"];
+            express.code = [temp objectForKey:@"code"];
+            express.type = [temp objectForKey:@"type"];
+            express.isHidden = [NSNumber numberWithBool: NO];
+            express.isUsually = [temp objectForKey:@"isUsually"];
+            
+        }
+        
+        [RCTool saveCoreData];
+    }
     
     [expressArray release];
 }
 
 + (BOOL)isIpad
 {
-	UIDevice* device = [UIDevice currentDevice];
-	if(device.userInterfaceIdiom == UIUserInterfaceIdiomPhone)
-	{
-		return NO;
-	}
-	else if(device.userInterfaceIdiom == UIUserInterfaceIdiomPad)
-	{
-		return YES;
-	}
-	
-	return NO;
+    UIDevice* device = [UIDevice currentDevice];
+    if(device.userInterfaceIdiom == UIUserInterfaceIdiomPhone)
+    {
+        return NO;
+    }
+    else if(device.userInterfaceIdiom == UIUserInterfaceIdiomPad)
+    {
+        return YES;
+    }
+    
+    return NO;
 }
 
 + (UIView*)getAdView
 {
-	FoodAppDelegate* appDelegate = (FoodAppDelegate*)[[UIApplication sharedApplication] delegate];
+    FoodAppDelegate* appDelegate = (FoodAppDelegate*)[[UIApplication sharedApplication] delegate];
     
     if(appDelegate.adMobAd.alpha)
     {
@@ -514,64 +514,64 @@ void systemSoundCompletionProc(SystemSoundID ssID,void *clientData)
         if(adView)
             return adView;
     }
-	
-	return nil;
+    
+    return nil;
 }
 
 + (void)showScreenAdView
 {
-	FoodAppDelegate* appDelegate = (FoodAppDelegate*)[[UIApplication sharedApplication] delegate];
+    FoodAppDelegate* appDelegate = (FoodAppDelegate*)[[UIApplication sharedApplication] delegate];
     [appDelegate showInterstitialAd:nil];
 }
 
 + (NSDictionary*)parse:(NSString*)jsonString
 {
-	if(0 == [jsonString length])
-		return nil;
-	
-	SBJSON* sbjson = [[SBJSON alloc] init];
-	NSDictionary* dict = [sbjson objectWithString:jsonString error:nil];
-	[sbjson release];
-	return dict;
+    if(0 == [jsonString length])
+        return nil;
+    
+    SBJSON* sbjson = [[SBJSON alloc] init];
+    NSDictionary* dict = [sbjson objectWithString:jsonString error:nil];
+    [sbjson release];
+    return dict;
 }
 
 + (NSString*)getKey
 {
     return KEY_2;
     
-	static int i = 0;
-	
-	if(i & 1)
-		return KEY_0;
-	else
-		return KEY_1;
-	
-	i++;
+    static int i = 0;
+    
+    if(i & 1)
+        return KEY_0;
+    else
+        return KEY_1;
+    
+    i++;
 }
 
 + (NSDictionary*)getResult:(NSString*)timeString
 {
-	if(0 == [timeString length])
-		return nil;
-	
-	NSString* filePath = [NSString stringWithFormat:@"%@/%@.db",[RCTool getUserDocumentDirectoryPath],timeString];
-	return [NSDictionary dictionaryWithContentsOfFile:filePath];
+    if(0 == [timeString length])
+        return nil;
+    
+    NSString* filePath = [NSString stringWithFormat:@"%@/%@.db",[RCTool getUserDocumentDirectoryPath],timeString];
+    return [NSDictionary dictionaryWithContentsOfFile:filePath];
 }
 
 + (void)saveResult:(NSDictionary*)dict time:(NSString*)timeString
 {
-	if(nil == dict || 0 == [timeString length])
-		return;
-	
-	NSString* filePath = [NSString stringWithFormat:@"%@/%@.db",[RCTool getUserDocumentDirectoryPath],timeString];
-	[dict writeToFile:filePath atomically:NO];
+    if(nil == dict || 0 == [timeString length])
+        return;
+    
+    NSString* filePath = [NSString stringWithFormat:@"%@/%@.db",[RCTool getUserDocumentDirectoryPath],timeString];
+    [dict writeToFile:filePath atomically:NO];
 }
 
 + (UIWindow*)frontWindow
 {
-	UIApplication *app = [UIApplication sharedApplication];
-	UIWindow *frontWindow = [[app windows] lastObject];
-	return frontWindow;
+    UIApplication *app = [UIApplication sharedApplication];
+    UIWindow *frontWindow = [[app windows] lastObject];
+    return frontWindow;
 }
 
 #pragma mark - 最近选择的快递
@@ -605,7 +605,7 @@ void systemSoundCompletionProc(SystemSoundID ssID,void *clientData)
         
         [recentExpressArray insertObject:expressCode atIndex:0];
     }
-
+    
     [recentExpressArray writeToFile:path atomically:YES];
     [recentExpressArray release];
 }
@@ -654,32 +654,32 @@ void systemSoundCompletionProc(SystemSoundID ssID,void *clientData)
 + (void)playSound:(NSString*)filename
 {
     if(g_soundID || 0 == [filename length])
-	    return;
+        return;
     
-	NSString *path = [[NSBundle mainBundle] pathForResource:filename ofType:nil];
-	
-	NSURL *fileUrl = [NSURL fileURLWithPath:path];
-	g_soundID = 0;
-	AudioServicesCreateSystemSoundID((CFURLRef)fileUrl, &g_soundID);
+    NSString *path = [[NSBundle mainBundle] pathForResource:filename ofType:nil];
     
-	AudioServicesAddSystemSoundCompletion(g_soundID,NULL,NULL,systemSoundCompletionProc, NULL);
-	AudioServicesPlaySystemSound(g_soundID);
+    NSURL *fileUrl = [NSURL fileURLWithPath:path];
+    g_soundID = 0;
+    AudioServicesCreateSystemSoundID((CFURLRef)fileUrl, &g_soundID);
+    
+    AudioServicesAddSystemSoundCompletion(g_soundID,NULL,NULL,systemSoundCompletionProc, NULL);
+    AudioServicesPlaySystemSound(g_soundID);
 }
 
 + (void)showAlert:(NSString*)aTitle message:(NSString*)message
 {
-	if(0 == [aTitle length] || 0 == [message length])
-		return;
-	
-	
-	UIAlertView *alert = [[UIAlertView alloc] initWithTitle: aTitle
-													message: message
-												   delegate: self
-										  cancelButtonTitle: @"确定"
-										  otherButtonTitles: nil];
+    if(0 == [aTitle length] || 0 == [message length])
+        return;
+    
+    
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle: aTitle
+                                                    message: message
+                                                   delegate: self
+                                          cancelButtonTitle: @"确定"
+                                          otherButtonTitles: nil];
     alert.tag = 110;
-	[alert show];
-	[alert release];
+    [alert show];
+    [alert release];
 }
 
 
@@ -688,12 +688,12 @@ void systemSoundCompletionProc(SystemSoundID ssID,void *clientData)
     static BOOL isCraked = NO;
     
     NSBundle *bundle = [NSBundle mainBundle];
-	NSDictionary *info = [bundle infoDictionary];
-	if ([info objectForKey: @"SignerIdentity"] != nil)//判断是否为破解App,方法可能已过时
-	{
-         NSLog(@"+++isCraked");
-		isCraked = YES;
-	}
+    NSDictionary *info = [bundle infoDictionary];
+    if ([info objectForKey: @"SignerIdentity"] != nil)//判断是否为破解App,方法可能已过时
+    {
+        NSLog(@"+++isCraked");
+        isCraked = YES;
+    }
     else//通过检查是否为jailbreak设备来判断是否为破解App
     {
         NSArray *jailbrokenPath = [NSArray arrayWithObjects:
@@ -991,6 +991,34 @@ void systemSoundCompletionProc(SystemSoundID ssID,void *clientData)
     }
     
     return @"";
+}
+
++ (BOOL)showLessAds
+{
+    NSDictionary* app_info = [[NSUserDefaults standardUserDefaults] objectForKey:@"app_info"];
+    if(app_info && [app_info isKindOfClass:[NSDictionary class]])
+    {
+        
+        NSString* show_less_ads = [app_info objectForKey:@"show_less_ads"];
+        if([show_less_ads isEqualToString:@"0"])
+            return NO;
+        
+    }
+    
+    return YES;
+}
+
++ (BOOL)showAdWhenLaunch
+{
+    NSDictionary* app_info = [[NSUserDefaults standardUserDefaults] objectForKey:@"app_info"];
+    if(app_info && [app_info isKindOfClass:[NSDictionary class]])
+    {
+        NSString* show_ad_launch = [app_info objectForKey:@"show_ad_launch"];
+        if([show_ad_launch isEqualToString:@"1"])
+            return YES;
+    }
+    
+    return NO;
 }
 
 

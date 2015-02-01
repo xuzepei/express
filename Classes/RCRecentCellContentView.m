@@ -43,7 +43,7 @@
     if(nil == _item)
         return;
     
-    CGFloat max_width = [RCTool getScreenSize].width - 30.0;
+    CGFloat max_width = [RCTool getScreenSize].width - 33.0;
     CGFloat fontSize = 14.0;
     if([RCTool isIpad])
     {
@@ -103,7 +103,7 @@
         [TITLE_COLOR set];
         
         NSString* temp = [NSString stringWithFormat:@"单号: %@",danhao];
-        CGSize size = [temp drawInRect:CGRectMake(offset_x, offset_y, max_width, CGFLOAT_MAX) withFont:[UIFont systemFontOfSize:fontSize+2]];
+        CGSize size = [temp drawInRect:CGRectMake(offset_x + 3, offset_y, max_width, CGFLOAT_MAX) withFont:[UIFont systemFontOfSize:fontSize+2]];
         
         if([state length])
         {
@@ -121,7 +121,7 @@
     {
         [NOTE_COLOR set];
         NSString* temp = [NSString stringWithFormat:@"备注: %@",note];
-        CGSize size = [temp drawInRect:CGRectMake(offset_x, offset_y, max_width, CGFLOAT_MAX) withFont:[UIFont systemFontOfSize:fontSize+2]];
+        CGSize size = [temp drawInRect:CGRectMake(offset_x + 3, offset_y, max_width, CGFLOAT_MAX) withFont:[UIFont systemFontOfSize:fontSize+2]];
         offset_y += size.height;
     }
     
@@ -131,7 +131,7 @@
     {
         offset_y += 2.0f;
         NSString* temp = [NSString stringWithFormat:@"快递: %@",name];
-        CGSize size = [temp drawInRect:CGRectMake(offset_x + 3, offset_y, max_width, CGFLOAT_MAX) withFont:[UIFont systemFontOfSize:fontSize]];
+        CGSize size = [temp drawInRect:CGRectMake(offset_x + 3, offset_y, max_width, CGFLOAT_MAX) withFont:[UIFont systemFontOfSize:fontSize+2]];
         offset_y += size.height;
     }
     
@@ -143,7 +143,7 @@
     if([dateString length])
     {
         NSString* temp = [NSString stringWithFormat:@"时间: %@",dateString];
-        [temp drawInRect:CGRectMake(offset_x + 3, offset_y, max_width, CGFLOAT_MAX) withFont:[UIFont systemFontOfSize:fontSize]];
+        [temp drawInRect:CGRectMake(offset_x + 3, offset_y, max_width, CGFLOAT_MAX) withFont:[UIFont systemFontOfSize:fontSize+2]];
         //offset_y += size.height;
     }
 }
