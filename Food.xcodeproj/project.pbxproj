@@ -54,8 +54,6 @@
 		0916939319D3A93C0004146B /* tab_item_3@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0916938F19D3A93C0004146B /* tab_item_3@3x.png */; };
 		0916939619D3ADC30004146B /* tab_item_0@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0916939419D3ADC30004146B /* tab_item_0@2x.png */; };
 		0916939719D3ADC30004146B /* tab_item_0@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0916939519D3ADC30004146B /* tab_item_0@3x.png */; };
-		091693A619D3B01F0004146B /* libGoogleAdMobAds.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 091693A419D3B01F0004146B /* libGoogleAdMobAds.a */; };
-		091693A719D3B01F0004146B /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = 091693A519D3B01F0004146B /* README.txt */; };
 		091693A919D3B2480004146B /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 091693A819D3B2480004146B /* EventKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		091693AB19D3B26E0004146B /* EventKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 091693AA19D3B26E0004146B /* EventKitUI.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		091693AE19D3E04D0004146B /* scan_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 091693AC19D3E04D0004146B /* scan_button@2x.png */; };
@@ -123,7 +121,8 @@
 		09A49A3E1957FA46006840C6 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 09A49A3D1957FA46006840C6 /* libz.dylib */; };
 		09A49A4019580EE2006840C6 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09A49A3F19580EE2006840C6 /* MobileCoreServices.framework */; };
 		09B5B75E1793BC34003BB44C /* mingliangwuliu@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 09B5B75D1793BC34003BB44C /* mingliangwuliu@2x.png */; };
-		09DBAF821959B78C00D53FBA /* libMobClickLibrary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 09DBAF801959B78C00D53FBA /* libMobClickLibrary.a */; };
+		09CD73BD1CC3B602006EDAC3 /* GoogleMobileAds.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09CD73B41CC3B602006EDAC3 /* GoogleMobileAds.framework */; };
+		09CD73BE1CC3B602006EDAC3 /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = 09CD73BC1CC3B602006EDAC3 /* README.txt */; };
 		09F1060D165FAB3800EC8962 /* dhlen@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 09F10609165FAB3800EC8962 /* dhlen@2x.png */; };
 		09F1060F165FAB3800EC8962 /* fedexus@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 09F1060B165FAB3800EC8962 /* fedexus@2x.png */; };
 		09F10613165FB5B000EC8962 /* neweggozzo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 09F10611165FB5B000EC8962 /* neweggozzo@2x.png */; };
@@ -290,20 +289,6 @@
 		0916938F19D3A93C0004146B /* tab_item_3@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab_item_3@3x.png"; sourceTree = "<group>"; };
 		0916939419D3ADC30004146B /* tab_item_0@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab_item_0@2x.png"; sourceTree = "<group>"; };
 		0916939519D3ADC30004146B /* tab_item_0@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab_item_0@3x.png"; sourceTree = "<group>"; };
-		0916939819D3B01F0004146B /* GADAdMobExtras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GADAdMobExtras.h; sourceTree = "<group>"; };
-		0916939919D3B01F0004146B /* GADAdNetworkExtras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GADAdNetworkExtras.h; sourceTree = "<group>"; };
-		0916939A19D3B01F0004146B /* GADAdSize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GADAdSize.h; sourceTree = "<group>"; };
-		0916939B19D3B01F0004146B /* GADBannerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GADBannerView.h; sourceTree = "<group>"; };
-		0916939C19D3B01F0004146B /* GADBannerViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GADBannerViewDelegate.h; sourceTree = "<group>"; };
-		0916939D19D3B01F0004146B /* GADInAppPurchase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GADInAppPurchase.h; sourceTree = "<group>"; };
-		0916939E19D3B01F0004146B /* GADInAppPurchaseDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GADInAppPurchaseDelegate.h; sourceTree = "<group>"; };
-		0916939F19D3B01F0004146B /* GADInterstitial.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GADInterstitial.h; sourceTree = "<group>"; };
-		091693A019D3B01F0004146B /* GADInterstitialDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GADInterstitialDelegate.h; sourceTree = "<group>"; };
-		091693A119D3B01F0004146B /* GADModules.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GADModules.h; sourceTree = "<group>"; };
-		091693A219D3B01F0004146B /* GADRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GADRequest.h; sourceTree = "<group>"; };
-		091693A319D3B01F0004146B /* GADRequestError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GADRequestError.h; sourceTree = "<group>"; };
-		091693A419D3B01F0004146B /* libGoogleAdMobAds.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libGoogleAdMobAds.a; sourceTree = "<group>"; };
-		091693A519D3B01F0004146B /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
 		091693A819D3B2480004146B /* EventKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKit.framework; path = System/Library/Frameworks/EventKit.framework; sourceTree = SDKROOT; };
 		091693AA19D3B26E0004146B /* EventKitUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKitUI.framework; path = System/Library/Frameworks/EventKitUI.framework; sourceTree = SDKROOT; };
 		091693AC19D3E04D0004146B /* scan_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "scan_button@2x.png"; sourceTree = "<group>"; };
@@ -407,8 +392,14 @@
 		09A49A3F19580EE2006840C6 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		09B5B75D1793BC34003BB44C /* mingliangwuliu@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mingliangwuliu@2x.png"; sourceTree = "<group>"; };
 		09C089631793ED00009B766C /* Food 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Food 2.xcdatamodel"; sourceTree = "<group>"; };
-		09DBAF801959B78C00D53FBA /* libMobClickLibrary.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libMobClickLibrary.a; sourceTree = "<group>"; };
-		09DBAF811959B78C00D53FBA /* MobClick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobClick.h; sourceTree = "<group>"; };
+		09CD73B41CC3B602006EDAC3 /* GoogleMobileAds.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleMobileAds.framework; sourceTree = "<group>"; };
+		09CD73B61CC3B602006EDAC3 /* GADMAdNetworkAdapterProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GADMAdNetworkAdapterProtocol.h; sourceTree = "<group>"; };
+		09CD73B71CC3B602006EDAC3 /* GADMAdNetworkConnectorProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GADMAdNetworkConnectorProtocol.h; sourceTree = "<group>"; };
+		09CD73B81CC3B602006EDAC3 /* GADMediationAdRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GADMediationAdRequest.h; sourceTree = "<group>"; };
+		09CD73B91CC3B602006EDAC3 /* GADMEnums.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GADMEnums.h; sourceTree = "<group>"; };
+		09CD73BA1CC3B602006EDAC3 /* GADMRewardBasedVideoAdNetworkAdapterProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GADMRewardBasedVideoAdNetworkAdapterProtocol.h; sourceTree = "<group>"; };
+		09CD73BB1CC3B602006EDAC3 /* GADMRewardBasedVideoAdNetworkConnectorProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GADMRewardBasedVideoAdNetworkConnectorProtocol.h; sourceTree = "<group>"; };
+		09CD73BC1CC3B602006EDAC3 /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
 		09F10609165FAB3800EC8962 /* dhlen@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dhlen@2x.png"; sourceTree = "<group>"; };
 		09F1060B165FAB3800EC8962 /* fedexus@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "fedexus@2x.png"; sourceTree = "<group>"; };
 		09F10611165FB5B000EC8962 /* neweggozzo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "neweggozzo@2x.png"; sourceTree = "<group>"; };
@@ -555,11 +546,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				09CD73BD1CC3B602006EDAC3 /* GoogleMobileAds.framework in Frameworks */,
 				091693AB19D3B26E0004146B /* EventKitUI.framework in Frameworks */,
 				091693A919D3B2480004146B /* EventKit.framework in Frameworks */,
 				0935F06E1431BA51003FC618 /* CFNetwork.framework in Frameworks */,
 				09A49A4019580EE2006840C6 /* MobileCoreServices.framework in Frameworks */,
-				091693A619D3B01F0004146B /* libGoogleAdMobAds.a in Frameworks */,
 				09A49A3E1957FA46006840C6 /* libz.dylib in Frameworks */,
 				0939053A14401E2700DA3B84 /* MessageUI.framework in Frameworks */,
 				0939053314401E0400DA3B84 /* Security.framework in Frameworks */,
@@ -575,7 +566,6 @@
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
 				2892E4100DC94CBA00A64D0F /* CoreGraphics.framework in Frameworks */,
-				09DBAF821959B78C00D53FBA /* libMobClickLibrary.a in Frameworks */,
 				28860BE50F44EE6400985440 /* CoreData.framework in Frameworks */,
 				0935F0721431BA68003FC618 /* SystemConfiguration.framework in Frameworks */,
 				0935F08F1431BD50003FC618 /* libsqlite3.0.dylib in Frameworks */,
@@ -592,13 +582,12 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				09CD73B31CC3B602006EDAC3 /* AdMob */,
 				091693B619D407560004146B /* DES */,
 				091693B019D3F4650004146B /* RCImageHttpRequest.h */,
 				091693B119D3F4650004146B /* RCImageHttpRequest.m */,
 				091693B219D3F4650004146B /* RCImageLoader.h */,
 				091693B319D3F4650004146B /* RCImageLoader.m */,
-				09DBAF7F1959B78C00D53FBA /* UMeng */,
-				09A49A281957F6C7006840C6 /* AdMob */,
 				09F4FBEF1659FE4100CFC80B /* Scanner */,
 				093FA1E914A03F3600886910 /* OHAttributedLabel */,
 				0947D9E8149F344600D71E49 /* JSON */,
@@ -752,34 +741,27 @@
 			path = sound;
 			sourceTree = "<group>";
 		};
-		09A49A281957F6C7006840C6 /* AdMob */ = {
+		09CD73B31CC3B602006EDAC3 /* AdMob */ = {
 			isa = PBXGroup;
 			children = (
-				0916939819D3B01F0004146B /* GADAdMobExtras.h */,
-				0916939919D3B01F0004146B /* GADAdNetworkExtras.h */,
-				0916939A19D3B01F0004146B /* GADAdSize.h */,
-				0916939B19D3B01F0004146B /* GADBannerView.h */,
-				0916939C19D3B01F0004146B /* GADBannerViewDelegate.h */,
-				0916939D19D3B01F0004146B /* GADInAppPurchase.h */,
-				0916939E19D3B01F0004146B /* GADInAppPurchaseDelegate.h */,
-				0916939F19D3B01F0004146B /* GADInterstitial.h */,
-				091693A019D3B01F0004146B /* GADInterstitialDelegate.h */,
-				091693A119D3B01F0004146B /* GADModules.h */,
-				091693A219D3B01F0004146B /* GADRequest.h */,
-				091693A319D3B01F0004146B /* GADRequestError.h */,
-				091693A419D3B01F0004146B /* libGoogleAdMobAds.a */,
-				091693A519D3B01F0004146B /* README.txt */,
+				09CD73B41CC3B602006EDAC3 /* GoogleMobileAds.framework */,
+				09CD73B51CC3B602006EDAC3 /* Mediation Adapters */,
 			);
 			path = AdMob;
 			sourceTree = "<group>";
 		};
-		09DBAF7F1959B78C00D53FBA /* UMeng */ = {
+		09CD73B51CC3B602006EDAC3 /* Mediation Adapters */ = {
 			isa = PBXGroup;
 			children = (
-				09DBAF801959B78C00D53FBA /* libMobClickLibrary.a */,
-				09DBAF811959B78C00D53FBA /* MobClick.h */,
+				09CD73B61CC3B602006EDAC3 /* GADMAdNetworkAdapterProtocol.h */,
+				09CD73B71CC3B602006EDAC3 /* GADMAdNetworkConnectorProtocol.h */,
+				09CD73B81CC3B602006EDAC3 /* GADMediationAdRequest.h */,
+				09CD73B91CC3B602006EDAC3 /* GADMEnums.h */,
+				09CD73BA1CC3B602006EDAC3 /* GADMRewardBasedVideoAdNetworkAdapterProtocol.h */,
+				09CD73BB1CC3B602006EDAC3 /* GADMRewardBasedVideoAdNetworkConnectorProtocol.h */,
+				09CD73BC1CC3B602006EDAC3 /* README.txt */,
 			);
-			path = UMeng;
+			path = "Mediation Adapters";
 			sourceTree = "<group>";
 		};
 		09F4FBC01659FC9A00CFC80B /* ZBarSDK */ = {
@@ -1242,6 +1224,7 @@
 				09FA0805165BC82A0008E846 /* vancl@2x.png in Resources */,
 				09FA0807165BC82A0008E846 /* wanjiawuliu@2x.png in Resources */,
 				09FA0809165BC82A0008E846 /* xinbangwuliu@2x.png in Resources */,
+				09CD73BE1CC3B602006EDAC3 /* README.txt in Resources */,
 				09FA080D165BC82A0008E846 /* xinfengwuliu@2x.png in Resources */,
 				09FA080F165BC82A0008E846 /* xingchengjibian@2x.png in Resources */,
 				0916938B19D3A7D10004146B /* tab_item_2@3x.png in Resources */,
@@ -1302,7 +1285,6 @@
 				0913FDA616631CB6002FF3E7 /* haimengsudi@2x.png in Resources */,
 				0976D23517F942BF00A58584 /* Images.xcassets in Resources */,
 				0913FDA816631CB6002FF3E7 /* haoshengwuliu@2x.png in Resources */,
-				091693A719D3B01F0004146B /* README.txt in Resources */,
 				0913FDAA16631CB6002FF3E7 /* henglu@2x.png in Resources */,
 				0916939319D3A93C0004146B /* tab_item_3@3x.png in Resources */,
 				0913FDAC16631CB6002FF3E7 /* hkpost@2x.png in Resources */,
@@ -1408,26 +1390,31 @@
 				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: GAO HUIJUAN";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: GAO HUIJUAN";
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: GAO HUIJUAN (2699D9JM3T)";
 				COPY_PHASE_STRIP = YES;
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Classes/AdMob",
+					"$(PROJECT_DIR)/Classes/admob",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Food_Prefix.pch;
 				INFOPLIST_FILE = "Food-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/Classes/AdMob/LibAdapterIAd-Nov52013",
 					"$(PROJECT_DIR)/Classes/ZBarSDK",
 					"$(SRCROOT)/Classes/ZBarSDK",
 					"$(PROJECT_DIR)/Classes/AdMob",
 					"$(SRCROOT)/Classes",
-					"$(PROJECT_DIR)/Classes/UMeng",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = Food;
-				PROVISIONING_PROFILE = "d43429c3-8ad3-4e88-bca9-1db982314af4";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "d43429c3-8ad3-4e88-bca9-1db982314af4";
+				PROVISIONING_PROFILE = "fdce725c-0d34-43be-8a58-42d15e7251a9";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "fdce725c-0d34-43be-8a58-42d15e7251a9";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -1442,9 +1429,16 @@
 				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iOS Development: GAO HUIJUAN (H6MYDBBM56)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iOS Development: GAO HUIJUAN (H6MYDBBM56)";
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Classes/AdMob",
+					"$(PROJECT_DIR)/Classes/admob",
+				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -1453,17 +1447,15 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/Classes/AdMob/LibAdapterIAd-Nov52013",
 					"$(PROJECT_DIR)/Classes/ZBarSDK",
 					"$(SRCROOT)/Classes/ZBarSDK",
 					"$(PROJECT_DIR)/Classes/AdMob",
 					"$(SRCROOT)/Classes",
-					"$(PROJECT_DIR)/Classes/UMeng",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = Food;
-				PROVISIONING_PROFILE = "75927f88-5694-4c67-beec-d80bae99adca";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "75927f88-5694-4c67-beec-d80bae99adca";
+				PROVISIONING_PROFILE = "";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = "armv7 armv7s arm64";
@@ -1477,26 +1469,31 @@
 				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: GAO HUIJUAN";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: GAO HUIJUAN";
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: GAO HUIJUAN (2699D9JM3T)";
 				COPY_PHASE_STRIP = YES;
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Classes/AdMob",
+					"$(PROJECT_DIR)/Classes/admob",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Food_Prefix.pch;
 				INFOPLIST_FILE = "Food-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/Classes/AdMob/LibAdapterIAd-Nov52013",
 					"$(PROJECT_DIR)/Classes/ZBarSDK",
 					"$(SRCROOT)/Classes/ZBarSDK",
 					"$(PROJECT_DIR)/Classes/AdMob",
 					"$(SRCROOT)/Classes",
-					"$(PROJECT_DIR)/Classes/UMeng",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = Food;
-				PROVISIONING_PROFILE = "d43429c3-8ad3-4e88-bca9-1db982314af4";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "d43429c3-8ad3-4e88-bca9-1db982314af4";
+				PROVISIONING_PROFILE = "fdce725c-0d34-43be-8a58-42d15e7251a9";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "fdce725c-0d34-43be-8a58-42d15e7251a9";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;

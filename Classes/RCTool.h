@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "GADInterstitial.h"
 
 @interface RCTool : NSObject {
 

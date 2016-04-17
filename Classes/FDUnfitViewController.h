@@ -8,8 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "RCInfoViewController.h"
-#import "GADInterstitial.h"
-
+@import GoogleMobileAds;
 
 @interface FDUnfitViewController : UIViewController
 <UITableViewDelegate,UITableViewDataSource,UISearchBarDelegate,UISearchDisplayDelegate,GADInterstitialDelegate>

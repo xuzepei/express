@@ -66,15 +66,15 @@ typedef enum {
 #define APP_URL @"https://itunes.apple.com/app/id490990930?mt=8"
 
 //广告ID
-#define AD_ID @"ca-app-pub-1207330468801232/1794642383"
-#define SCREEN_AD_ID @"ca-app-pub-1207330468801232/3271375584"
+#define AD_ID @"ca-app-pub-1207330468801232/1310165182"
+#define SCREEN_AD_ID @"ca-app-pub-1207330468801232/2786898384"
 #define SCREEN_AD_RATE 3
 
 //UMeng 设置
-#define UMENG_APP_KEY @"53a97f0356240b244d045949"
+#define UMENG_APP_KEY @""
 
 //获取协同信息URL
-#define APP_INFO_URL @"http://www.tapguilt.com/api/express.php?v=1.7.1"
+#define APP_INFO_URL @""
 
 //密钥
 #define SECRET_KEY @"20140925"

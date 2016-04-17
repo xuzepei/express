@@ -13,9 +13,7 @@
 #import "FDPictureViewController.h"
 #import "FDFavoriteViewController.h"
 #import "RCTool.h"
-#import "GADBannerView.h"
 #import "RCHttpRequest.h"
-#import "MobClick.h"
 
 #define APP_ALERT 111
 
@@ -44,11 +42,6 @@
 #pragma mark Application lifecycle
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    
-    //UMeng
-    [MobClick startWithAppkey:UMENG_APP_KEY
-                 reportPolicy:SEND_INTERVAL
-                    channelId:nil];
     
 	[RCTool importLocalData];
 	
@@ -108,7 +101,11 @@
 	[_pictureNavigationController release];
 	[_favoriteNavigationController release];
 	
-    [window addSubview:_tabBarController.view];
+    if([RCTool systemVersion] >=7.0)
+        [window setRootViewController:_tabBarController];
+    else
+        [window addSubview:_tabBarController.view];
+    
     [window makeKeyAndVisible];
     
     if([RCTool systemVersion] >=7.0)
@@ -167,8 +164,11 @@
      Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
      */
     
-    self.showFullScreenAd = [RCTool showAdWhenLaunch];
-    [self getAppInfo];
+    self.showFullScreenAd = NO; //[RCTool showAdWhenLaunch];
+    //[self getAppInfo];
+    
+    self.ad_id = [RCTool getAdId];
+    [self getAD];
 }
 
 
@@ -334,8 +334,6 @@
     self.adMobAd = nil;
     self.adInterstitial = nil;
     
-    self.adView = nil;
-    self.interstitial = nil;
     
     self.ad_id = nil;
 	
@@ -391,27 +389,13 @@
 		_adMobAd = nil;
 	}
     
-	if(NO == [RCTool isIpad])
-	{
-		_adMobAd = [[GADBannerView alloc]
-                    initWithFrame:CGRectMake(0.0,0,
-                                             320.0f,
-                                             50.0f)];
-	}
-	else
-	{
-        _adMobAd = [[GADBannerView alloc]
-                    initWithFrame:CGRectMake(0.0,0,
-                                             728.0f,
-                                             90.0f)];
-	}
-	
-	
+    _adMobAd = [[GADBannerView alloc] initWithAdSize:kGADAdSizeSmartBannerPortrait];
 	
 	_adMobAd.adUnitID = [RCTool getAdId];
 	_adMobAd.delegate = self;
 	_adMobAd.alpha = 0.0;
 	_adMobAd.rootViewController = _tabBarController;
+    
 	[_adMobAd loadRequest:[GADRequest request]];
 	
 }
@@ -426,13 +410,7 @@
         self.adMobAd = nil;
     }
     
-    if(self.adView && self.adView.superview)
-    {
-        [self.adView removeFromSuperview];
-        self.adView = nil;
-    }
     self.adInterstitial = nil;
-    self.interstitial = nil;
 	
 	[self initAdMob];
     
@@ -472,8 +450,7 @@ didFailToReceiveAdWithError:(GADRequestError *)error
 {
     if(nil == self.adInterstitial && [self.ad_id length])
     {
-        _adInterstitial = [[GADInterstitial alloc] init];
-        _adInterstitial.adUnitID = [RCTool getScreenAdId];
+        _adInterstitial = [[GADInterstitial alloc] initWithAdUnitID:[RCTool getScreenAdId]];
         _adInterstitial.delegate = self;
     }
     
@@ -509,13 +486,9 @@ didFailToReceiveAdWithError:(GADRequestError *)error
 - (void)showInterstitialAd:(id)argument
 {
     static int showTimes = 0;
-    if(self.adInterstitial)
+    if(self.adInterstitial.isReady)
     {
         [self.adInterstitial presentFromRootViewController:_tabBarController.selectedViewController];
-    }
-    else if(self.interstitial && self.interstitial.loaded)
-    {
-        [self.interstitial presentFromViewController:_tabBarController.selectedViewController];
     }
     else
     {
@@ -527,74 +500,6 @@ didFailToReceiveAdWithError:(GADRequestError *)error
             [self getAdInterstitial];
         }
     }
-}
-
-#pragma mark - iAd
-
-- (void)initAdView
-{
-    if(nil == _adView)
-        _adView = [[ADBannerView alloc] initWithAdType:ADAdTypeBanner];
-    _adView.delegate = self;
-    CGRect rect = _adView.frame;
-    rect.origin.y = [RCTool getScreenSize].height;
-    _adView.frame = rect;
-    
-    self.isAdViewVisible = NO;
-}
-
-- (void)bannerViewDidLoadAd:(ADBannerView *)banner
-{
-    NSLog(@"iAd,bannerViewDidLoadAd");
-    
-    //[[RCTool getRootNavigationController].topViewController.view addSubview:_adView];
-}
-
-- (void)bannerView:(ADBannerView *)banner didFailToReceiveAdWithError:(NSError *)error
-{
-    NSLog(@"iAd,didFailToReceiveAdWithError");
-    
-    self.isAdViewVisible = NO;
-    [self.adView removeFromSuperview];
-    self.adView = nil;
-    
-    //如果iAd失败，则调用admob
-    [self performSelector:@selector(initAdMob) withObject:nil afterDelay:3];
-}
-
-- (void)initInterstitial
-{
-    if(NO == [RCTool isIpad])
-        return;
-    
-    if(nil == _interstitial)
-    {
-        _interstitial = [[ADInterstitialAd alloc] init];
-        _interstitial.delegate = self;
-    }
-    
-}
-
-- (void)interstitialAdDidLoad:(ADInterstitialAd *)interstitialAd
-{
-    NSLog(@"iAd,interstitialAdDidLoad");
-    
-
-}
-
-- (void)interstitialAdDidUnload:(ADInterstitialAd *)interstitialAd
-{
-    NSLog(@"iAd,interstitialAdDidUnload");
-    self.interstitial = nil;
-}
-
-- (void)interstitialAd:(ADInterstitialAd *)interstitialAd didFailWithError:(NSError *)error
-{
-    NSLog(@"iAd,interstitialAd <%@> recieved error <%@>", interstitialAd, error);
-    self.interstitial = nil;
-    
-    //尝试调用Admob的全屏广告
-    [self getAdInterstitial];
 }
 
 #pragma mark - App Info
