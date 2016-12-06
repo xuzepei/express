@@ -780,28 +780,28 @@ void systemSoundCompletionProc(SystemSoundID ssID,void *clientData)
 
 + (NSString*)getAppURL
 {
-    NSDictionary* app_info = [[NSUserDefaults standardUserDefaults] objectForKey:@"app_info"];
-    if(app_info && [app_info isKindOfClass:[NSDictionary class]])
-    {
-        NSString* link = [app_info objectForKey:@"link"];
-        if([link length])
-            return link;
-    }
+//    NSDictionary* app_info = [[NSUserDefaults standardUserDefaults] objectForKey:@"app_info"];
+//    if(app_info && [app_info isKindOfClass:[NSDictionary class]])
+//    {
+//        NSString* link = [app_info objectForKey:@"link"];
+//        if([link length])
+//            return link;
+//    }
     
     return APP_URL;
 }
 
 + (BOOL)isOpenAll
 {
-    NSDictionary* app_info = [[NSUserDefaults standardUserDefaults] objectForKey:@"app_info"];
-    if(app_info && [app_info isKindOfClass:[NSDictionary class]])
-    {
-        NSString* openall = [app_info objectForKey:@"openall"];
-        if([openall isEqualToString:@"1"])
-            return YES;
-    }
+//    NSDictionary* app_info = [[NSUserDefaults standardUserDefaults] objectForKey:@"app_info"];
+//    if(app_info && [app_info isKindOfClass:[NSDictionary class]])
+//    {
+//        NSString* openall = [app_info objectForKey:@"openall"];
+//        if([openall isEqualToString:@"1"])
+//            return YES;
+//    }
     
-    return NO;
+    return YES;
 }
 
 + (NSString*)decryptUseDES:(NSString*)cipherText key:(NSString*)key {

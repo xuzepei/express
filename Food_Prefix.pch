@@ -66,6 +66,7 @@ typedef enum {
 #define APP_URL @"https://itunes.apple.com/app/id490990930?mt=8"
 
 //广告ID
+#define APP_ID @"ca-app-pub-1207330468801232~8833431987"
 #define AD_ID @"ca-app-pub-1207330468801232/1310165182"
 #define SCREEN_AD_ID @"ca-app-pub-1207330468801232/2786898384"
 #define SCREEN_AD_RATE 3

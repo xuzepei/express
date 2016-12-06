@@ -43,6 +43,8 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
+    [GADMobileAds configureWithApplicationID:APP_ID];
+    
 	[RCTool importLocalData];
 	
 	
